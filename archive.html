@@ -222,5 +222,26 @@ footer.colophon { margin-top: 44px; border-top: 3px double var(--ink); padding-t
   .grid2 .paper:nth-child(2n) { border-left: 0; padding-left: 0; }
   .index .howto { margin-left: 0; }
 }
+
+/* weekly review */
+.weekly .essay { margin-bottom: 26px; }
+.weekly .essay h1 { font-size: clamp(30px, 3.8vw, 50px); }
+.weekly .essay .body { columns: 3 260px; }
+.features { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 26px 30px; border-top: 1px solid var(--ink); padding-top: 18px; }
+.feature { min-width: 0; }
+.features .feature:nth-child(2n) { border-left: 1px solid var(--rule); padding-left: 22px; }
+.feature h3 { font-size: 1.45rem; line-height: 1.12; font-weight: 700; margin-block: 4px 6px; }
+.feature .meta { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-size: .82rem; color: var(--ink-2); margin-bottom: 8px; }
+.feature .sum { font-size: .97rem; hyphens: auto; }
+.reception { background: var(--paper-2); padding: 10px 14px 4px; margin-top: 4px; }
+.reception h4 { margin: 0 0 6px; color: var(--accent); }
+.reception ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-size: .88rem; line-height: 1.35; }
+.numbers { margin-top: 26px; }
+.numbers .flag { border-top-width: 2px; }
+.numbers-h { font-size: 1.3rem; font-weight: 800; font-style: italic; }
+@media (max-width: 820px) {
+  .features { grid-template-columns: minmax(0,1fr); }
+  .features .feature:nth-child(2n) { border-left: 0; padding-left: 0; }
+}
 </style><div class="sheet"><header><div class="plate-row" style="grid-template-columns:1fr"><div><div class="plate">The Quantum Daily</div><div class="motto">Past editions · <a href="index.html">today’s paper</a></div></div></div></header><section class="dept"><div class="flag"><h2>Archive</h2></div><div class="cal"><div class="ev"><span class="when">2026-10-16</span><span><a href="editions/2026-10-16.html">Fri 16 Oct 2026</a></span></div><div class="ev"><span class="when">2026-10-15</span><span><a href="editions/2026-10-15.html">Thu 15 Oct 2026</a></span></div></div></section></div></body>
 </html>
