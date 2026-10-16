@@ -243,5 +243,27 @@ footer.colophon { margin-top: 44px; border-top: 3px double var(--ink); padding-t
   .features { grid-template-columns: minmax(0,1fr); }
   .features .feature:nth-child(2n) { border-left: 0; padding-left: 0; }
 }
-</style><div class="sheet"><header><div class="plate-row" style="grid-template-columns:1fr"><div><div class="plate">The Quantum Daily</div><div class="motto">Past editions · <a href="index.html">today’s paper</a></div></div></div></header><section class="dept"><div class="flag"><h2>Archive</h2></div><div class="cal"><div class="ev"><span class="when">2026-10-16</span><span><a href="editions/2026-10-16.html">Fri 16 Oct 2026</a></span></div><div class="ev"><span class="when">2026-10-15</span><span><a href="editions/2026-10-15.html">Thu 15 Oct 2026</a></span></div></div></section></div></body>
+
+/* archive link + archive calendar */
+.archive-link { margin: 0 0 8px; font-family: var(--f-label); font-weight: 600; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
+.archive-link a { color: var(--accent); }
+.arch-month { margin-bottom: 26px; }
+.arch-month h3 { font-size: 1.3rem; font-style: italic; font-weight: 700; margin-bottom: 8px; }
+.week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px; }
+.week.head { margin-bottom: 4px; color: var(--ink-2); }
+.slot { min-width: 0; min-height: 92px; padding: 6px 8px; border: 1px solid var(--rule); display: flex; flex-direction: column; gap: 3px; text-decoration: none; }
+.slot .num { font-family: var(--f-head); font-weight: 700; font-size: 1.15rem; line-height: 1; }
+.slot .hl { font-size: .8rem; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+.slot .wk { font-family: var(--f-label); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.slot.has { border-color: var(--ink); background: var(--paper); }
+.slot.has:hover { background: var(--paper-2); color: var(--ink); }
+.slot.none { color: var(--ink-2); }
+.slot.none .hl { font-style: italic; }
+.slot.out { border-style: dashed; opacity: .45; }
+@media (max-width: 600px) {
+  .slot { min-height: 54px; padding: 4px 5px; }
+  .slot .hl { display: none; }
+}
+.slot.future { color: var(--ink-2); opacity: .55; }
+</style><div class="sheet"><header><div class="plate-row" style="grid-template-columns:1fr"><div><div class="plate">The Quantum Daily</div><div class="motto">Past editions · <a href="index.html">today’s paper</a></div></div></div></header><section class="dept arch-year"><div class="flag"><h2>2026</h2></div><div class="arch-month"><h3>October</h3><div class="week head"><span class="label">Mon</span><span class="label">Tue</span><span class="label">Wed</span><span class="label">Thu</span><span class="label">Fri</span></div><div class="week"><div class="slot out" aria-hidden="true"></div><div class="slot out" aria-hidden="true"></div><div class="slot out" aria-hidden="true"></div><div class="slot none"><span class="num">1</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">2</span><span class="hl">no edition</span></div></div><div class="week"><div class="slot none"><span class="num">5</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">6</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">7</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">8</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">9</span><span class="hl">no edition</span></div></div><div class="week"><div class="slot none"><span class="num">12</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">13</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">14</span><span class="hl">no edition</span></div><a class="slot has" href="editions/2026-10-15.html"><span class="num">15</span><span class="hl">Fourteen hundred logical qubits per block, and they can compute</span></a><a class="slot has" href="editions/2026-10-16.html"><span class="num">16</span><span class="hl">Four surface codes, one stitched block: concatenation without lattice surgery on Willow</span></a></div><div class="week"><div class="slot future"><span class="num">19</span></div><div class="slot future"><span class="num">20</span></div><div class="slot future"><span class="num">21</span></div><div class="slot future"><span class="num">22</span></div><div class="slot future"><span class="num">23</span></div></div><div class="week"><div class="slot future"><span class="num">26</span></div><div class="slot future"><span class="num">27</span></div><div class="slot future"><span class="num">28</span></div><div class="slot future"><span class="num">29</span></div><div class="slot future"><span class="num">30</span></div></div></div></section></div></body>
 </html>
