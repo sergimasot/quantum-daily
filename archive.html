@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 </head>
 <body>
-<title>The Quantum Daily</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"><style>/* Layout: wide digital broadsheet. 12-col front page (lead + rail), ranked "standings" for papers,
+<title>The Quantum Daily</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap"><style>/* Layout: wide digital broadsheet. 12-col front page (lead + rail), ranked "standings" for papers,
    compact departments for news and the calendar. Blackletter nameplate, Newsreader for news type,
    Plex Mono for the vernacular of the field (arXiv IDs, scite counts, dates). */
 :root {
@@ -265,5 +265,128 @@ footer.colophon { margin-top: 44px; border-top: 3px double var(--ink); padding-t
   .slot .hl { display: none; }
 }
 .slot.future { color: var(--ink-2); opacity: .55; }
-</style><div class="sheet"><header><div class="plate-row" style="grid-template-columns:1fr"><div><div class="plate">The Quantum Daily</div><div class="motto">Past editions · <a href="index.html">today’s paper</a></div></div></div></header><section class="dept arch-year"><div class="flag"><h2>2026</h2></div><div class="arch-month"><h3>October</h3><div class="week head"><span class="label">Mon</span><span class="label">Tue</span><span class="label">Wed</span><span class="label">Thu</span><span class="label">Fri</span></div><div class="week"><div class="slot out" aria-hidden="true"></div><div class="slot out" aria-hidden="true"></div><div class="slot out" aria-hidden="true"></div><div class="slot none"><span class="num">1</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">2</span><span class="hl">no edition</span></div></div><div class="week"><div class="slot none"><span class="num">5</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">6</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">7</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">8</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">9</span><span class="hl">no edition</span></div></div><div class="week"><div class="slot none"><span class="num">12</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">13</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">14</span><span class="hl">no edition</span></div><a class="slot has" href="editions/2026-10-15.html"><span class="num">15</span><span class="hl">Fourteen hundred logical qubits per block, and they can compute</span></a><a class="slot has" href="editions/2026-10-16.html"><span class="num">16</span><span class="wk">Weekly review</span><span class="hl">Four surface codes, one stitched block: concatenation without lattice surgery on Willow</span></a></div><div class="week"><a class="slot has" href="editions/2026-10-19.html"><span class="num">19</span><span class="hl">No √N search on the plane: an electrostatic lower bound makes Tulsi’s walk optimal</span></a><div class="slot future"><span class="num">20</span></div><div class="slot future"><span class="num">21</span></div><div class="slot future"><span class="num">22</span></div><div class="slot future"><span class="num">23</span></div></div><div class="week"><div class="slot future"><span class="num">26</span></div><div class="slot future"><span class="num">27</span></div><div class="slot future"><span class="num">28</span></div><div class="slot future"><span class="num">29</span></div><div class="slot future"><span class="num">30</span></div></div></div></section></div></body>
+
+/* ---------- v3: news-led front page, top-8 papers, trending ---------- */
+.front-main { min-width: 0; }
+.seconds { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px 26px; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--ink); }
+.seconds .second h3 { font-size: 1.3rem; }
+.convo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: .9rem; line-height: 1.35; }
+.convo li .label { display: block; font-size: .64rem; margin-bottom: 1px; }
+.convo li b { font-family: var(--f-head); font-size: 1.02rem; }
+
+.top-row { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 30px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--rule); }
+.paper.top h3 { font-size: 1.85rem; line-height: 1.1; }
+.paper.top .rank { font-size: 3.2rem; color: var(--accent); }
+.paper.top .sum { columns: 2 260px; column-gap: 26px; column-rule: 1px solid var(--rule); font-size: 1rem; }
+.top-aside { border-left: 1px solid var(--ink); padding-left: 22px; min-width: 0; }
+.top-aside .livebox h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.grid2 .paper h3 { font-size: 1.32rem; }
+
+.trend-intro { font-size: 1rem; max-width: 70ch; }
+.trends { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px 28px; margin-bottom: 22px; }
+.trend { min-width: 0; border-top: 2px solid var(--ink); padding-top: 8px; font-size: .93rem; }
+.trend-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.trend-head h3 { font-size: 1.2rem; font-weight: 700; }
+.trend-nums { display: flex; align-items: center; gap: 10px; color: var(--ink-2); margin: 4px 0 6px; flex-wrap: wrap; }
+.trend .src { font-size: .82rem; color: var(--ink-2); }
+.heat { font-family: var(--f-label); font-weight: 600; font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; padding: 1px 6px; border: 1px solid var(--ink-2); color: var(--ink-2); white-space: nowrap; }
+.heat-hot, .heat-rising { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.heat-cooling { border-style: dashed; }
+.spark { display: block; flex: none; }
+.spark-area { fill: var(--paper-2); }
+.spark-line { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.spark-dot { fill: var(--accent); }
+.tgrid { display: grid; gap: 0; font-size: .86rem; overflow-x: auto; }
+.trow { display: grid; grid-template-columns: minmax(150px, 1.4fr) 100px 60px 110px 90px; align-items: center; gap: 12px; padding-block: 4px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+.trow.thead { border-bottom: 1px solid var(--ink); color: var(--ink-2); }
+.trow .tname { font-family: var(--f-head); font-weight: 600; }
+@media (max-width: 820px) {
+  .top-row { grid-template-columns: minmax(0, 1fr); }
+  .top-aside { border-left: 0; padding-left: 0; border-top: 1px solid var(--ink); padding-top: 14px; }
+  .trow { grid-template-columns: minmax(120px, 1fr) 90px 40px 80px; }
+  .trow > :last-child { display: none; }
+}
+
+/* ---------- v4 ---------- */
+/* "In this issue": no rule under it, visible separators between items */
+.index { border-bottom: 0; padding-bottom: 4px; gap: 4px 0; }
+.index b { margin-right: 14px; }
+.index > span + span::before { content: "—"; color: var(--accent); margin-inline: 12px; font-weight: 600; }
+.index .howto { padding-left: 18px; }
+
+/* deadline urgency: filled < 7 days, tinted < 30 days, empty otherwise */
+.cd.urgent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.cd.soon { background: color-mix(in srgb, var(--accent) 16%, var(--paper)); color: var(--ink); border-color: var(--accent); }
+
+/* yesterday, settled: compact list under the live box */
+.settled-box { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.settled-box h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.settled-box .status { font-family: var(--f-data); font-size: .7rem; color: var(--ink-2); font-weight: 400; }
+.settled-box ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: .84rem; }
+.settled-box li { display: grid; grid-template-columns: 18px auto minmax(0,1fr); gap: 2px 8px; align-items: baseline; line-height: 1.25; }
+.settled-box li .r { font-family: var(--f-data); color: var(--ink-2); }
+.settled-box li .ours { grid-column: 3; font-family: var(--f-data); font-size: .66rem; color: var(--ink-2); }
+.settled-box .scorecard { font-size: .84rem; }
+
+/* "Worth a second look": as many columns as items (1–3) */
+.sleepers { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.sleepers h3.label { margin-bottom: 12px; }
+.gridn { display: grid; gap: 22px 30px; }
+.gridn.cols-1 { grid-template-columns: minmax(0,1fr); }
+.gridn.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.gridn.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.gridn .paper + .paper { border-left: 1px solid var(--rule); padding-left: 22px; }
+.gridn.cols-1 .sum { columns: 2 280px; column-gap: 26px; }
+
+/* industry briefs: one per line */
+.briefs ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
+.briefs li { padding-left: 14px; position: relative; }
+.briefs li::before { content: "■"; position: absolute; left: 0; top: .1em; font-size: .6em; color: var(--accent); }
+
+/* the paper ends with its footer; the reader's guide sits below it, on the desk, as page furniture */
+footer.colophon p { margin: 0 0 10px; }
+footer.colophon .archive-link { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--rule); font-size: .9rem; }
+.about-page { max-width: 1100px; margin: 64px auto 0; padding-inline: 8px; font-family: "IBM Plex Sans", system-ui, -apple-system, "Helvetica Neue", sans-serif; color: var(--ink); }
+.about-page .dept { margin-top: 0; }
+.about-page .flag { border-top: 1px solid var(--ink-2); border-bottom: 0; padding-top: 14px; }
+.about-page .flag h2 { font-family: "IBM Plex Sans", system-ui, sans-serif; font-style: normal; font-weight: 600; font-size: 1.15rem; letter-spacing: 0; }
+.about-page .about-cols { column-rule-color: color-mix(in srgb, var(--ink-2) 35%, transparent); }
+.about-page .about-item { font-size: .86rem; line-height: 1.5; }
+.about-page .about-item h3 { font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: .92rem; font-weight: 600; }
+@media (max-width: 820px) {
+  .gridn.cols-2, .gridn.cols-3 { grid-template-columns: minmax(0,1fr); }
+  .gridn .paper + .paper { border-left: 0; padding-left: 0; }
+  .index > span + span::before { margin-inline: 8px; }
+}
+.trow { grid-template-columns: minmax(150px, 1.4fr) 100px 54px 110px 84px 84px 84px; }
+@media (max-width: 820px) { .trow { grid-template-columns: minmax(120px, 1fr) 90px 40px 80px; } .trow > :nth-child(n+5) { display: none; } }
+.plate-row { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+
+/* v5: line under "In this issue" back; papers run on beside the side column */
+.index { border-bottom: 1px solid var(--ink); padding-bottom: 8px; }
+.top-row { align-items: start; }
+.top-main { min-width: 0; display: grid; gap: 22px; }
+.stack { display: grid; gap: 22px; padding-top: 20px; border-top: 1px solid var(--rule); }
+.stack .paper h3 { font-size: 1.32rem; }
+.stack .paper + .paper { padding-top: 20px; border-top: 1px solid var(--rule); }
+.stack .sum { columns: 2 260px; column-gap: 26px; column-rule: 1px solid var(--rule); }
+.stack:empty { display: none; }
+/* nameplate sits a little lower; subtitle tucked closer */
+.plate-row { padding-block: 22px 2px; }
+.motto { margin-top: -8px; }
+/* footer: sources on the left, credits on the right */
+.colo-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 32px; align-items: start; }
+.colo-row p { margin: 0; }
+.credits { display: grid; gap: 2px; text-align: right; font-family: var(--f-label); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+@media (max-width: 820px) { .colo-row { grid-template-columns: minmax(0, 1fr); } .credits { text-align: left; white-space: normal; } }
+/* folio: date always centred, whatever the length of the volume label on the left */
+.folio { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: baseline; }
+.folio > :first-child { justify-self: start; }
+.folio > :nth-child(2) { justify-self: center; text-align: center; }
+.folio > :last-child { justify-self: end; text-align: right; }
+@media (max-width: 600px) { .folio { grid-template-columns: minmax(0, 1fr); } .folio > * { justify-self: center; text-align: center; } }
+/* archive: trial-volume letter in the top-right corner of the box */
+.slot { position: relative; }
+.slot .vol { position: absolute; top: 4px; right: 7px; font-family: var(--f-head); font-style: italic; font-weight: 600; font-size: 1rem; line-height: 1; color: var(--accent); }
+</style><div class="sheet"><header><div class="plate-row" style="grid-template-columns:1fr"><div><div class="plate">The Quantum Daily</div><div class="motto">Past editions · <a href="index.html">today’s paper</a></div></div></div></header><section class="dept arch-year"><div class="flag"><h2>2026</h2></div><div class="arch-month"><h3>October</h3><div class="week head"><span class="label">Mon</span><span class="label">Tue</span><span class="label">Wed</span><span class="label">Thu</span><span class="label">Fri</span></div><div class="week"><div class="slot out" aria-hidden="true"></div><div class="slot out" aria-hidden="true"></div><div class="slot out" aria-hidden="true"></div><div class="slot none"><span class="num">1</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">2</span><span class="hl">no edition</span></div></div><div class="week"><div class="slot none"><span class="num">5</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">6</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">7</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">8</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">9</span><span class="hl">no edition</span></div></div><div class="week"><div class="slot none"><span class="num">12</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">13</span><span class="hl">no edition</span></div><div class="slot none"><span class="num">14</span><span class="hl">no edition</span></div><a class="slot has" href="editions/2026-10-15.html"><span class="vol" title="Trial volume α">α</span><span class="num">15</span><span class="hl">Fourteen hundred logical qubits per block, and they can compute</span></a><a class="slot has" href="editions/2026-10-16.html"><span class="vol" title="Trial volume α">α</span><span class="num">16</span><span class="wk">Weekly review</span><span class="hl">Four surface codes, one stitched block: concatenation without lattice surgery on Willow</span></a></div><div class="week"><a class="slot has" href="editions/2026-10-19.html"><span class="vol" title="Trial volume β">β</span><span class="num">19</span><span class="hl">AI joins the circuit-design race, and the argument moves to the baselines</span></a><div class="slot future"><span class="num">20</span></div><div class="slot future"><span class="num">21</span></div><div class="slot future"><span class="num">22</span></div><div class="slot future"><span class="num">23</span></div></div><div class="week"><div class="slot future"><span class="num">26</span></div><div class="slot future"><span class="num">27</span></div><div class="slot future"><span class="num">28</span></div><div class="slot future"><span class="num">29</span></div><div class="slot future"><span class="num">30</span></div></div></div></section></div></body>
 </html>
