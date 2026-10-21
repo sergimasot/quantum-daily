@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+<title>The Quantum Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: wide digital broadsheet. 12-col front page (lead + rail), ranked "standings" for papers,
+   compact departments for news and the calendar. Blackletter nameplate, Newsreader for news type,
+   Plex Mono for the vernacular of the field (arXiv IDs, scite counts, dates). */
+:root {
+  /* Single deliberate look: a sheet of newsprint lying on a desk, in light and dark app themes alike. */
+  --desk: #cfc8b8;
+  --paper: #f3eee1;           /* newsprint */
+  --paper-2: #e8e0cc;
+  --ink: #1b1a17;
+  --ink-2: #55514a;
+  --rule: #b8af9c;
+  --accent: #a3201b;          /* arXiv red, printed */
+  --accent-ink: #f3eee1;
+  --live: #1d6b4f;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .27 0 0 0 0 .18 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --f-plate: "UnifrakturMaguntia", "Old English Text MT", "Times New Roman", serif;
+  --f-head: "Newsreader", "Iowan Old Style", "Georgia", serif;
+  --f-body: "Newsreader", "Iowan Old Style", "Georgia", serif;
+  --f-label: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--desk); color: var(--ink);
+  font-family: var(--f-body); font-size: 17px; line-height: 1.5;
+  font-optical-sizing: auto;
+  margin: 0; padding-inline: 20px; padding-block: 24px 48px;
+}
+.sheet {
+  max-width: 1320px; margin: 0 auto; padding: 8px 40px 36px;
+  background-color: var(--paper);
+  background-image: var(--grain), radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(130, 100, 45, .10) 100%);
+  box-shadow: 0 1px 2px rgba(40, 30, 10, .18), 0 10px 30px rgba(40, 30, 10, .18);
+}
+a { color: inherit; text-decoration-color: color-mix(in srgb, var(--accent) 60%, transparent); text-underline-offset: 2px; }
+a:hover { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3, h4 { font-family: var(--f-head); text-wrap: pretty; margin: 0; }  /* fill each line; only the last may be shorter */
+p { margin: 0 0 .7em; }
+.mono { font-family: var(--f-data); font-size: .78em; letter-spacing: 0; }
+.label { font-family: var(--f-label); font-weight: 600; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+.kicker { color: var(--accent); }
+.muted { color: var(--ink-2); }
+
+/* ---------- Masthead ---------- */
+.folio { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--ink); padding-block: 10px 6px; color: var(--ink-2); }
+.plate-row { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 24px; padding-block: 10px 6px; }
+.plate { font-family: var(--f-plate); font-weight: 400; font-size: clamp(46px, 8.2vw, 112px); line-height: 1; text-align: center; letter-spacing: .005em; white-space: nowrap; }
+.ear { border: 1px solid var(--ink); padding: 8px 10px; max-width: 230px; font-size: .86rem; line-height: 1.3; }
+.ear.right { justify-self: end; text-align: right; }
+.ear .big { font-family: var(--f-head); font-weight: 700; font-size: 1.35rem; display: block; line-height: 1.1; }
+.motto { text-align: center; font-style: italic; color: var(--ink-2); font-size: .95rem; margin-top: -2px; }
+.index { border-top: 3px double var(--ink); border-bottom: 1px solid var(--ink); padding-block: 8px; margin-block: 10px 22px;
+  font-size: .92rem; display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.index b { font-family: var(--f-label); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+.note { font-style: italic; color: var(--ink-2); font-size: .95rem; margin: -8px 0 18px; }
+
+/* ---------- Front page ---------- */
+.front { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 34px; }
+.lead h1 { font-weight: 700; font-size: clamp(34px, 4.6vw, 62px); line-height: 1.02; letter-spacing: -.012em; margin-block: 6px 12px; font-variation-settings: "opsz" 72; }
+.lead .deck { font-size: 1.28rem; font-style: italic; line-height: 1.35; color: var(--ink-2); margin-bottom: 12px; }
+.byline { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; border-block: 1px solid var(--rule); padding-block: 7px; margin-bottom: 14px; font-size: .9rem; }
+.lead .body { columns: 2 260px; column-gap: 30px; column-rule: 1px solid var(--rule); hyphens: auto; text-align: justify; }
+.lead .body p:first-child::first-letter { float: left; font-family: var(--f-head); font-weight: 800; font-size: 4.3em; line-height: .82; padding: 6px 8px 0 0; color: var(--accent); }
+.rail { border-left: 1px solid var(--ink); padding-left: 26px; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.rail section + section { border-top: 1px solid var(--rule); padding-top: 18px; }
+.rail h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.second h3 { font-size: 1.4rem; line-height: 1.12; font-weight: 700; margin-block: 4px 6px; }
+.second p { font-size: .95rem; }
+
+/* deadlines */
+.dl { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.dl li { display: grid; grid-template-columns: 54px minmax(0,1fr); gap: 10px; align-items: start; font-size: .9rem; line-height: 1.3; }
+.cd { font-family: var(--f-data); font-size: .72rem; text-align: center; border: 1px solid var(--ink-2); padding: 3px 0 2px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.cd b { display: block; font-size: 1.05rem; font-family: var(--f-head); }
+.cd.soon { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+/* ---------- scite badge & confidence ---------- */
+.sc { display: inline-flex; align-items: baseline; gap: 4px; font-family: var(--f-data); font-size: .76rem; border: 1px solid var(--accent); color: var(--accent); padding: 0 6px; border-radius: 2px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sc b { font-weight: 600; font-size: .9rem; }
+.sc i { font-style: normal; font-size: .66rem; text-transform: uppercase; letter-spacing: .06em; opacity: .85; }
+.sc.live { background: var(--live); border-color: var(--live); color: var(--paper); }
+.conf { font-family: var(--f-label); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+.conf .dots { letter-spacing: 1px; color: var(--ink); }
+
+/* ---------- Sections ---------- */
+.dept { margin-top: 40px; }
+.flag { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-top: 4px solid var(--ink); border-bottom: 1px solid var(--ink); padding-block: 6px 5px; margin-bottom: 18px; }
+.flag h2 { font-size: 1.9rem; font-weight: 800; font-style: italic; letter-spacing: -.01em; }
+
+/* picks: featured pair then a ruled grid */
+.feat { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 30px; margin-bottom: 22px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px 30px; }
+.paper { min-width: 0; display: grid; grid-template-columns: 46px minmax(0,1fr); gap: 0 12px; align-content: start; }
+.feat .paper + .paper, .grid3 .paper:not(:nth-child(3n+1)) { border-left: 1px solid var(--rule); padding-left: 22px; }
+.rank { font-family: var(--f-head); font-style: italic; font-weight: 300; font-size: 2.6rem; line-height: .9; color: var(--ink-2); font-variant-numeric: lining-nums; }
+.paper h3 { font-size: 1.22rem; line-height: 1.16; font-weight: 700; margin-bottom: 5px; }
+.feat .paper h3 { font-size: 1.5rem; }
+.paper .meta { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-size: .82rem; color: var(--ink-2); margin-bottom: 7px; }
+.paper .sum { font-size: .95rem; hyphens: auto; }
+.feat .sum { font-size: 1rem; columns: 1; }
+.tag-you { font-family: var(--f-label); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 1px 5px; }
+.also { margin-top: 18px; padding-top: 10px; border-top: 1px dotted var(--rule); font-size: .92rem; }
+
+.yours { margin-top: 30px; background: var(--paper-2); padding: 18px 22px 8px; }
+.yours h3.label { margin-bottom: 12px; }
+.yours ul { list-style: none; margin: 0; padding: 0; columns: 2 300px; column-gap: 30px; }
+.yours li { break-inside: avoid; margin-bottom: 12px; font-size: .93rem; }
+.yours li b { font-family: var(--f-head); font-size: 1.02rem; }
+
+/* settled table */
+.tbl-wrap { overflow-x: auto; }
+table.settled { width: 100%; border-collapse: collapse; font-size: .93rem; font-variant-numeric: tabular-nums; }
+.settled th { font-family: var(--f-label); font-weight: 600; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); text-align: left; padding: 0 8px 6px; border-bottom: 1px solid var(--ink); }
+.settled td { padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.settled td.n { font-family: var(--f-data); font-size: .8rem; white-space: nowrap; }
+.bar { display: inline-block; height: 7px; background: var(--accent); vertical-align: middle; margin-left: 6px; opacity: .8; }
+.settled .flagcell { font-family: var(--f-label); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+.scorecard { margin: 14px 0 0; padding: 10px 0 0; font-size: .95rem; border-top: 1px dotted var(--rule); }
+.sleepers { margin-top: 20px; }
+
+/* news */
+.news { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px 30px; }
+.item { min-width: 0; }
+.item h3 { font-size: 1.2rem; line-height: 1.15; font-weight: 700; margin-block: 3px 5px; }
+.item p { font-size: .94rem; }
+.item.major { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); gap: 8px 30px; border-bottom: 1px solid var(--rule); padding-bottom: 16px; }
+.item.major h3 { font-size: clamp(26px, 3vw, 38px); line-height: 1.05; }
+.item.major p { font-size: 1.02rem; }
+.item .src { font-size: .8rem; color: var(--ink-2); }
+.briefs { margin-top: 16px; font-size: .92rem; border-top: 1px dotted var(--rule); padding-top: 10px; }
+.briefs b { font-family: var(--f-label); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; margin-right: 6px; }
+
+/* calendar */
+.cal { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px 26px; font-size: .9rem; }
+.ev { display: grid; grid-template-columns: 74px minmax(0,1fr); gap: 8px; line-height: 1.3; border-top: 1px solid var(--rule); padding-top: 7px; }
+.ev .when { font-family: var(--f-data); font-size: .74rem; color: var(--ink-2); }
+.cal-new { margin-top: 12px; font-size: .88rem; color: var(--ink-2); font-style: italic; }
+
+/* weekly */
+.week-score { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 16px; }
+.day { border-top: 2px solid var(--ink); padding-top: 6px; font-size: .88rem; }
+.day b { font-family: var(--f-head); font-size: 1.5rem; display: block; line-height: 1.1; }
+
+/* live scirate widget */
+.livebox h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.livebox .status { font-family: var(--f-data); font-size: .7rem; color: var(--ink-2); font-weight: 400; }
+.livebox ol { margin: 6px 0 8px; padding-left: 0; list-style: none; display: grid; gap: 5px; font-size: .86rem; }
+.livebox ol li { display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 8px; align-items: baseline; line-height: 1.25; }
+.livebox ol li .s { font-family: var(--f-data); font-weight: 600; color: var(--live); text-align: right; }
+.livebox ol li .ours { font-family: var(--f-data); font-size: .68rem; color: var(--ink-2); white-space: nowrap; }
+.livebox .empty { font-size: .86rem; color: var(--ink-2); }
+.btn { font-family: var(--f-label); font-weight: 600; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; background: var(--ink); color: var(--paper); border: 0; padding: 7px 12px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.steps { margin: 10px 0 0; padding-left: 18px; font-size: .86rem; display: grid; gap: 6px; }
+#paste { width: 100%; min-height: 54px; font-family: var(--f-data); font-size: .72rem; background: var(--paper-2); color: var(--ink); border: 1px dashed var(--ink-2); padding: 6px; resize: vertical; }
+.bm { display: inline-block; font-family: var(--f-label); font-weight: 600; font-size: .78rem; border: 1px solid var(--accent); color: var(--accent); padding: 2px 8px; text-decoration: none; cursor: grab; }
+details.install { font-size: .82rem; margin-top: 8px; color: var(--ink-2); }
+details.install summary { cursor: pointer; }
+.msg { font-size: .82rem; margin-top: 6px; }
+.msg.err { color: var(--accent); }
+.msg.ok { color: var(--live); }
+
+footer.colophon { margin-top: 44px; border-top: 3px double var(--ink); padding-top: 10px; font-size: .82rem; color: var(--ink-2); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+  .grid3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .grid3 .paper:not(:nth-child(3n+1)) { border-left: 0; padding-left: 0; }
+  .grid3 .paper:nth-child(2n) { border-left: 1px solid var(--rule); padding-left: 22px; }
+  .news { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 820px) {
+  body { padding-inline: 16px; padding-block: 12px 32px; font-size: 16px; }
+  .sheet { padding: 6px 16px 24px; }
+  .plate-row { grid-template-columns: minmax(0,1fr); }
+  .plate { white-space: normal; }
+  .ear, .ear.right { justify-self: stretch; max-width: none; text-align: left; }
+  .front, .feat, .grid3, .news, .item.major { grid-template-columns: minmax(0,1fr); }
+  .rail { border-left: 0; padding-left: 0; border-top: 3px double var(--ink); padding-top: 18px; }
+  .feat .paper + .paper, .grid3 .paper:nth-child(n) { border-left: 0; padding-left: 0; }
+  .feat .paper + .paper { margin-top: 20px; }
+  .lead .body { text-align: left; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sc { transition: background-color .4s, color .4s; }
+}
+@media print {
+  @page { size: A4 landscape; margin: 12mm; }
+  body { font-size: 11pt; padding: 0; background: none; }
+  .sheet { box-shadow: none; padding: 0; background: none; }
+  .livebox .controls, details.install { display: none; }
+  .paper, .item, .ev, .yours li { break-inside: avoid; }
+  .dept { break-before: auto; }
+}
+
+/* added: two-column picks, "why here" line, about section */
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 26px 30px; }
+.grid2 .paper:nth-child(2n) { border-left: 1px solid var(--rule); padding-left: 22px; }
+.why { font-size: .88rem; font-style: italic; color: var(--ink-2); margin-bottom: 6px; }
+.why .label { font-style: normal; color: var(--accent); margin-right: 4px; font-size: .64rem; }
+.index .howto { margin-left: auto; font-family: var(--f-label); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.about-cols { columns: 3 300px; column-gap: 32px; column-rule: 1px solid var(--rule); }
+.about-item { break-inside: avoid; margin-bottom: 18px; font-size: .93rem; }
+.about-item h3 { font-size: 1.12rem; font-weight: 700; margin-bottom: 6px; }
+.legend { list-style: none; margin: 0 0 .7em; padding: 0; display: grid; gap: 7px; }
+.legend li { line-height: 1.35; }
+.legend .sc, .legend .conf { margin-right: 6px; }
+@media (max-width: 820px) {
+  .grid2 { grid-template-columns: minmax(0,1fr); }
+  .grid2 .paper:nth-child(2n) { border-left: 0; padding-left: 0; }
+  .index .howto { margin-left: 0; }
+}
+
+/* weekly review */
+.weekly .essay { margin-bottom: 26px; }
+.weekly .essay h1 { font-size: clamp(30px, 3.8vw, 50px); }
+.weekly .essay .body { columns: 3 260px; }
+.features { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 26px 30px; border-top: 1px solid var(--ink); padding-top: 18px; }
+.feature { min-width: 0; }
+.features .feature:nth-child(2n) { border-left: 1px solid var(--rule); padding-left: 22px; }
+.feature h3 { font-size: 1.45rem; line-height: 1.12; font-weight: 700; margin-block: 4px 6px; }
+.feature .meta { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-size: .82rem; color: var(--ink-2); margin-bottom: 8px; }
+.feature .sum { font-size: .97rem; hyphens: auto; }
+.reception { background: var(--paper-2); padding: 10px 14px 4px; margin-top: 4px; }
+.reception h4 { margin: 0 0 6px; color: var(--accent); }
+.reception ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-size: .88rem; line-height: 1.35; }
+.numbers { margin-top: 26px; }
+.numbers .flag { border-top-width: 2px; }
+.numbers-h { font-size: 1.3rem; font-weight: 800; font-style: italic; }
+@media (max-width: 820px) {
+  .features { grid-template-columns: minmax(0,1fr); }
+  .features .feature:nth-child(2n) { border-left: 0; padding-left: 0; }
+}
+
+/* archive link + archive calendar */
+.archive-link { margin: 0 0 8px; font-family: var(--f-label); font-weight: 600; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
+.archive-link a { color: var(--accent); }
+.arch-month { margin-bottom: 26px; }
+.arch-month h3 { font-size: 1.3rem; font-style: italic; font-weight: 700; margin-bottom: 8px; }
+.week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px; }
+.week.head { margin-bottom: 4px; color: var(--ink-2); }
+.slot { min-width: 0; min-height: 92px; padding: 6px 8px; border: 1px solid var(--rule); display: flex; flex-direction: column; gap: 3px; text-decoration: none; }
+.slot .num { font-family: var(--f-head); font-weight: 700; font-size: 1.15rem; line-height: 1; }
+.slot .hl { font-size: .8rem; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+.slot .wk { font-family: var(--f-label); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.slot.has { border-color: var(--ink); background: var(--paper); }
+.slot.has:hover { background: var(--paper-2); color: var(--ink); }
+.slot.none { color: var(--ink-2); }
+.slot.none .hl { font-style: italic; }
+.slot.out { border-style: dashed; opacity: .45; }
+@media (max-width: 600px) {
+  .slot { min-height: 54px; padding: 4px 5px; }
+  .slot .hl { display: none; }
+}
+.slot.future { color: var(--ink-2); opacity: .55; }
+
+/* ---------- v3: news-led front page, top-8 papers, trending ---------- */
+.front-main { min-width: 0; }
+.seconds { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px 26px; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--ink); }
+.seconds .second h3 { font-size: 1.3rem; }
+.convo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: .9rem; line-height: 1.35; }
+.convo li .label { display: block; font-size: .64rem; margin-bottom: 1px; }
+.convo li b { font-family: var(--f-head); font-size: 1.02rem; }
+
+.top-row { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 30px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--rule); }
+.paper.top h3 { font-size: 1.85rem; line-height: 1.1; }
+.paper.top .rank { font-size: 3.2rem; color: var(--accent); }
+.paper.top .sum { columns: 2 260px; column-gap: 26px; column-rule: 1px solid var(--rule); font-size: 1rem; }
+.top-aside { border-left: 1px solid var(--ink); padding-left: 22px; min-width: 0; }
+.top-aside .livebox h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.grid2 .paper h3 { font-size: 1.32rem; }
+
+.trend-intro { font-size: 1rem; max-width: 70ch; }
+.trends { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px 28px; margin-bottom: 22px; }
+.trend { min-width: 0; border-top: 2px solid var(--ink); padding-top: 8px; font-size: .93rem; }
+.trend-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.trend-head h3 { font-size: 1.2rem; font-weight: 700; }
+.trend-nums { display: flex; align-items: center; gap: 10px; color: var(--ink-2); margin: 4px 0 6px; flex-wrap: wrap; }
+.trend .src { font-size: .82rem; color: var(--ink-2); }
+.heat { font-family: var(--f-label); font-weight: 600; font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; padding: 1px 6px; border: 1px solid var(--ink-2); color: var(--ink-2); white-space: nowrap; }
+.heat-hot, .heat-rising { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.heat-cooling { border-style: dashed; }
+.spark { display: block; flex: none; }
+.spark-area { fill: var(--paper-2); }
+.spark-line { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.spark-dot { fill: var(--accent); }
+.tgrid { display: grid; gap: 0; font-size: .86rem; overflow-x: auto; }
+.trow { display: grid; grid-template-columns: minmax(150px, 1.4fr) 100px 60px 110px 90px; align-items: center; gap: 12px; padding-block: 4px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+.trow.thead { border-bottom: 1px solid var(--ink); color: var(--ink-2); }
+.trow .tname { font-family: var(--f-head); font-weight: 600; }
+@media (max-width: 820px) {
+  .top-row { grid-template-columns: minmax(0, 1fr); }
+  .top-aside { border-left: 0; padding-left: 0; border-top: 1px solid var(--ink); padding-top: 14px; }
+  .trow { grid-template-columns: minmax(120px, 1fr) 90px 40px 80px; }
+  .trow > :last-child { display: none; }
+}
+
+/* ---------- v4 ---------- */
+/* "In this issue": no rule under it, visible separators between items */
+.index { border-bottom: 0; padding-bottom: 4px; gap: 4px 0; }
+.index b { margin-right: 14px; }
+.index > span + span::before { content: "—"; color: var(--accent); margin-inline: 12px; font-weight: 600; }
+.index .howto { padding-left: 18px; }
+
+/* deadline urgency: filled < 7 days, tinted < 30 days, empty otherwise */
+.cd.urgent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.cd.soon { background: color-mix(in srgb, var(--accent) 16%, var(--paper)); color: var(--ink); border-color: var(--accent); }
+
+/* yesterday, settled: compact list under the live box */
+.settled-box { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.settled-box h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.settled-box .status { font-family: var(--f-data); font-size: .7rem; color: var(--ink-2); font-weight: 400; }
+.settled-box ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: .84rem; }
+.settled-box li { display: grid; grid-template-columns: 18px auto minmax(0,1fr); gap: 2px 8px; align-items: baseline; line-height: 1.25; }
+.settled-box li .r { font-family: var(--f-data); color: var(--ink-2); }
+.settled-box li .ours { grid-column: 3; font-family: var(--f-data); font-size: .66rem; color: var(--ink-2); }
+.settled-box .scorecard { font-size: .84rem; }
+
+/* "Worth a second look": as many columns as items (1–3) */
+.sleepers { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.sleepers h3.label { margin-bottom: 12px; }
+.gridn { display: grid; gap: 22px 30px; }
+.gridn.cols-1 { grid-template-columns: minmax(0,1fr); }
+.gridn.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.gridn.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.gridn .paper + .paper { border-left: 1px solid var(--rule); padding-left: 22px; }
+.gridn.cols-1 .sum { columns: 2 280px; column-gap: 26px; }
+
+/* industry briefs: one per line */
+.briefs ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
+.briefs li { padding-left: 14px; position: relative; }
+.briefs li::before { content: "■"; position: absolute; left: 0; top: .1em; font-size: .6em; color: var(--accent); }
+
+/* the paper ends with its footer; the reader's guide sits below it, on the desk, as page furniture */
+footer.colophon p { margin: 0 0 10px; }
+footer.colophon .archive-link { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--rule); font-size: .9rem; }
+.about-page { max-width: 1100px; margin: 64px auto 0; padding-inline: 8px; font-family: "IBM Plex Sans", system-ui, -apple-system, "Helvetica Neue", sans-serif; color: var(--ink); }
+.about-page .dept { margin-top: 0; }
+.about-page .flag { border-top: 1px solid var(--ink-2); border-bottom: 0; padding-top: 14px; }
+.about-page .flag h2 { font-family: "IBM Plex Sans", system-ui, sans-serif; font-style: normal; font-weight: 600; font-size: 1.15rem; letter-spacing: 0; }
+.about-page .about-cols { column-rule-color: color-mix(in srgb, var(--ink-2) 35%, transparent); }
+.about-page .about-item { font-size: .86rem; line-height: 1.5; }
+.about-page .about-item h3 { font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: .92rem; font-weight: 600; }
+@media (max-width: 820px) {
+  .gridn.cols-2, .gridn.cols-3 { grid-template-columns: minmax(0,1fr); }
+  .gridn .paper + .paper { border-left: 0; padding-left: 0; }
+  .index > span + span::before { margin-inline: 8px; }
+}
+.trow { grid-template-columns: minmax(150px, 1.4fr) 100px 54px 110px 84px 84px 84px; }
+@media (max-width: 820px) { .trow { grid-template-columns: minmax(120px, 1fr) 90px 40px 80px; } .trow > :nth-child(n+5) { display: none; } }
+.plate-row { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+
+/* v5: line under "In this issue" back; papers run on beside the side column */
+.index { border-bottom: 1px solid var(--ink); padding-bottom: 8px; }
+.top-row { align-items: start; }
+.top-main { min-width: 0; display: grid; gap: 22px; }
+.stack { display: grid; gap: 22px; padding-top: 20px; border-top: 1px solid var(--rule); }
+.stack .paper h3 { font-size: 1.32rem; }
+.stack .paper + .paper { padding-top: 20px; border-top: 1px solid var(--rule); }
+.stack .sum { columns: 2 260px; column-gap: 26px; column-rule: 1px solid var(--rule); }
+.stack:empty { display: none; }
+/* nameplate sits a little lower; subtitle tucked closer */
+.plate-row { padding-block: 22px 2px; }
+.motto { margin-top: -8px; }
+/* footer: sources on the left, credits on the right */
+.colo-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 32px; align-items: start; }
+.colo-row p { margin: 0; }
+.credits { display: grid; gap: 2px; text-align: right; font-family: var(--f-label); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+@media (max-width: 820px) { .colo-row { grid-template-columns: minmax(0, 1fr); } .credits { text-align: left; white-space: normal; } }
+/* folio: date always centred, whatever the length of the volume label on the left */
+.folio { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: baseline; }
+.folio > :first-child { justify-self: start; }
+.folio > :nth-child(2) { justify-self: center; text-align: center; }
+.folio > :last-child { justify-self: end; text-align: right; }
+@media (max-width: 600px) { .folio { grid-template-columns: minmax(0, 1fr); } .folio > * { justify-self: center; text-align: center; } }
+/* archive: trial-volume letter in the top-right corner of the box */
+.slot { position: relative; }
+.slot .vol { position: absolute; top: 4px; right: 7px; font-family: var(--f-head); font-style: italic; font-weight: 600; font-size: 1rem; line-height: 1; color: var(--accent); }
+/* lead headline size follows its length */
+.lead h1.head.mid { font-size: clamp(30px, 4vw, 52px); }
+.lead h1.head.long { font-size: clamp(28px, 3.4vw, 46px); line-height: 1.04; }
+/* lead headline a touch larger than the first pass */
+.lead h1.head.mid { font-size: clamp(32px, 4.3vw, 56px); }
+.lead h1.head.long { font-size: clamp(30px, 3.8vw, 52px); }
+
+/* v6: three paper sizes, and a separate block for yesterday's missed papers */
+.papers-small { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+.paper.small { grid-template-columns: 34px minmax(0,1fr); }
+.paper.small .rank { font-size: 1.9rem; }
+.paper.small h3 { font-size: 1.08rem; line-height: 1.18; }
+.paper.small .meta { font-size: .76rem; }
+.paper.small .why { font-size: .8rem; }
+.paper.small .sum { font-size: .86rem; line-height: 1.45; }
+.paper.small .sum p:nth-child(n+3) { display: none; }   /* keep the small ones brief */
+
+.sleepers { display: none; }   /* superseded by .second-look */
+.second-look { margin-top: 40px; padding: 16px 22px 8px; background: var(--paper-2); border-top: 3px double var(--ink); }
+.second-look > h3.label { margin-bottom: 12px; }
+.second-look .paper.mini { grid-template-columns: minmax(0,1fr); }
+.second-look .was { color: var(--ink-2); font-size: .64rem; margin-bottom: 3px; }
+.second-look .gridn .paper + .paper { border-left-color: color-mix(in srgb, var(--ink-2) 35%, transparent); }
+.second-look .gridn.cols-1 .sum { columns: 2 280px; }
+
+/* thin industry day: the one story and the briefs side by side, split by a short rule */
+.news-compact { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 0 44px; align-items: start; }
+.news.one { grid-template-columns: minmax(0, 1fr); }
+.briefs.side { margin-top: 0; padding-top: 0; border-top: 0; position: relative; }
+.briefs.side::before { content: ""; position: absolute; left: -22px; top: 12%; bottom: 12%; border-left: 1px solid var(--rule); }
+.briefs.side > b { display: block; margin-bottom: 6px; }
+@media (max-width: 820px) {
+  .news-compact { grid-template-columns: minmax(0, 1fr); }
+  .briefs.side { margin-top: 16px; padding-top: 10px; border-top: 1px dotted var(--rule); }
+  .briefs.side::before { display: none; }
+}
+
+</style>
+<div class="sheet"><header><div class="folio label"><span>Vol. I · No. 2 · Daily Edition</span><span>Wednesday 21 October 2026</span><span>Lausanne · quant-ph</span></div><div class="plate-row"><div><div class="plate">The Quantum Daily</div><div class="motto">All the qubits fit to print</div></div></div><nav class="index"><b>In this issue</b><span>Lossy boson sampling falls to a polynomial-time classical sampler whenever a constant fraction of photons survives</span><span>Alice &amp; Bob reports its PROQCIMA Phase 1 demonstrators: core cat-qubit operations work, logical error still above threshold</span><span>A Planckian speed limit on thermalization, proved from Hamiltonian estimation</span><span>Logarithmic mixing for Gibbs samplers on spin chains at every temperature</span><span>Trending: classical simulation leads the conversation; hardware and networking up in volume</span><span>Industry: an ETH spin-off for ion and atom control, IQM time for DLR, Quandela in Vietnam</span><a class="howto" href="#about">How to read this paper</a></nav></header><div class="front"><div class="front-main"><article class="lead"><div class="label kicker">Classical simulation · BosonSampling</div><h1 class="head long">Lossy boson sampling is classically simulable whenever a constant fraction of photons survives</h1><p class="deck">Go and Jeong give a polynomial-time sampler for Fock-state BosonSampling at any fixed loss fraction, for most Haar interferometers in the dilute regime. The provable boundary moves from √N surviving photons to a linear fraction.</p><div class="byline"><span>B. Go, H. Jeong (NextQuantum Center, Seoul National University)</span><a class="mono" href="https://arxiv.org/abs/2610.27065">arXiv:2610.27065</a><a class="sc" data-id="2610.27065" href="https://scirate.com/arxiv/2610.27065" title="SciRate scites"><b>—</b><i>scites</i></a></div><div class="body"><p>How much photon loss can a boson-sampling experiment absorb before a classical computer reproduces its statistics? For single-photon inputs the provable answer has stayed small. <a href="https://arxiv.org/abs/1801.06166">Oszmaniec and Brod</a> and <a href="https://arxiv.org/abs/1712.10037">García-Patrón, Renema and Shchesnovich</a> showed efficient simulation when only about √N of N photons survive, and the paper quotes the rigorous regime to date as n = O(√(εN)) surviving photons, or transmission η = O(√(ε/N)). Experiments lose a constant fraction, not everything but √N. Go and Jeong now give an algorithm running in time poly(M, N, 1/ε, 1/δ) for any fixed survival fraction n/N in (0, 1), which samples within total variation distance ε of the fixed-loss distribution with probability 1 − δ over Haar-random M-mode interferometers, and they extend it to uniform transmission loss at any fixed η.</p><p>The method is not a tensor network. Under fixed loss the output probability is an average of |Per|<sup>2</sup> over which n of the N input columns survived, and the authors expand that average in a Hoeffding decomposition over input subsets, where the order-j term carries weight C(n, j)/C(N, j). For Gaussian matrix entries the terms are orthogonal, so truncating at degree d leaves a mean-square error at most (n/N)<sup>d+1</sup>/(1 − n/N), and a density-domination lemma transfers the bound to Haar submatrices when M ≥ C<sub>0</sub>n<sup>2</sup>N. Color coding replaces subset enumeration, bringing a marginal from N<sup>O(d)</sup> to 2<sup>O(d)</sup>, and a signed sequential sampler draws outputs one mode at a time. The degree needed is d = O(1 + log(1/εδ)/log(N/n)), so the runtime is M·n·N<sup>3</sup>·ε<sup>−2</sup>·δ<sup>−1</sup>·2<sup>O(d)</sup>.</p><p>The paper appeared overnight and we found no reaction yet, so the caveats come from the authors themselves. The guarantee holds for most interferometers, not all; the dilute condition M ≥ C<sub>0</sub>n<sup>2</sup>N asks for far more modes than the M ~ N<sup>2</sup> of the standard hardness arguments; the main theorem targets the collision-collapsed distribution, and the full Fock output needs M = Ω(n<sup>2</sup>/εδ); and the input is single photons, where Jiuzhang and Borealis run Gaussian boson sampling with squeezed light. The authors say earlier attempts at the linear-survival regime either lacked guarantees (a Metropolis sampler) or ran in exponential time.</p><p>What to watch: whether the Hoeffding truncation extends to squeezed-state inputs, where the loss results of <a href="https://arxiv.org/abs/2306.03709">Oh, Liu, Alexeev, Fefferman and Jiang</a> are numerical rather than provable; whether the mode condition can be brought down toward M ~ N<sup>2</sup>; and how the photonic groups answer, since a constant-fraction result removes the argument that the loss in current chips is too mild to matter. Today’s listing also has Facchi, Parisi and colleagues computing moments of random permanents and hafnians by replica methods (also), the anticoncentration input that hardness arguments need.</p></div></article><div class="seconds"><article class="second"><div class="label kicker">Industry · France</div><h3>Alice &amp; Bob reports PROQCIMA Phase 1: cat-qubit demonstrators run a distance-3 repetition code, still above threshold</h3><div class="meta"><a class="mono" href="https://thequantuminsider.com/2026/10/20/alice-bob-reports-cat-qubit-progress-in-french-quantum-computing-program">The Quantum Insider</a></div><p>Alice &amp; Bob says the first phase of PROQCIMA, the French defence-led programme that aims at two 1,000-logical-qubit prototypes by 2032, produced three demonstrators: two 6-qubit chips and one 12-qubit chip. On them it ran a distance-3 repetition code over several cycles, noise-biased CNOT gates between cat qubits that keep bit-flip protection, a measure-and-reset sequence for auxiliary qubits that it describes as broadly in line with programme targets, and a non-Clifford gate on a cat qubit. The logical error rate measured across the register stayed above threshold; no value is given, and the company’s digital twin of the chip points to qubit coherence across the device as the first thing to fix. Only the company has spoken so far: we found no release on its own site and no independent assessment. Five companies are in the programme (Alice &amp; Bob, Pasqal, Quandela, Quobly, C12); three continue after year four and two beyond year eight.</p></article><article class="second"><div class="label kicker">Thermodynamics</div><h3>A Planckian speed limit on thermalization, proved from Hamiltonian estimation</h3><div class="meta"><a class="mono" href="https://physicsworld.com/a/your-beer-can-only-cool-so-fast-blame-quantum-mechanics/">Physics World</a></div><p>Abiuso, Rolandi, Calsamiglia, Sekatski and Perarnau-Llobet (IQOQI Vienna, TU Wien, UAB Barcelona, Geneva) prove in Nature Physics (<a href="https://arxiv.org/abs/2506.19188">arXiv:2506.19188</a>) that any process which brings a nontrivial class of Hamiltonians close to their thermal states takes at least ħ/(2k<sub>B</sub>T), half the Planckian time, and at least ħ/Δ at low temperature, where Δ is the gap. The move is to define a thermalization machine as one that also works for neighbouring Hamiltonians, which rules out shortcuts tuned to one system, and then to read the thermal state as an estimate of the Hamiltonian, so that the Heisenberg limit on estimation becomes a bound on time. Physics World (15 Oct) and <a href="https://phys.org/news/2026-10-physicists-quantum-limit-thermalization.html">phys.org</a> (18 Oct) covered it; neither carries an independent quote, and the paper’s own example is a model of interacting particles rather than an experiment.</p></article></div></div><aside class="rail"><section><h2>Deadline watch</h2><ul class="dl"><li><span class="cd urgent"><b>1</b>day</span><span><strong><a href="https://www.aps.org/events/2027/summit">APS Global Physics Summit 2027</a></strong>: contributed abstracts close 17:00 ET <span class="muted mono">Thu 22 Oct</span></span></li><li><span class="cd soon"><b>12</b>days</span><span><strong><a href="https://acm-stoc.org/stoc2027/stoc2027-cfp.html">STOC 2027</a></strong>: paper submission (video due 16 Nov) <span class="muted mono">Mon 2 Nov</span></span></li><li><span class="cd"><b>40</b>days</span><span><strong><a href="https://qipconference.org/2027/">QIP 2027</a></strong>: talk decisions <span class="muted mono">Mon 30 Nov</span></span></li><li><span class="cd"><b>44</b>days</span><span><strong><a href="https://qipconference.org/2027/">QIP 2027</a></strong>: poster submission, rolling decisions <span class="muted mono">Fri 4 Dec</span></span></li></ul></section><section class="convo"><h2>The conversation</h2><ul><li><span class="label kicker">Hacker News · 60 points</span><a href="https://news.ycombinator.com/item?id=50175185"><b>In Hilbert space, all things are quantumly possible</b></a> A Quanta essay from August resurfaced overnight. The 26 comments argue whether probability zero means impossible, whether a draw from the reals is really a draw from the computable reals, and whether Hilbert space is the map or the territory. Nothing on quantum computing.</li><li><span class="label kicker">Ars Technica</span><a href="https://arstechnica.com/science/2026/10/quantum-error-correction-goes-well-beyond-breakeven/"><b>Quantum error correction goes well beyond breakeven</b></a> Science-press coverage of Monday’s Helios color code arrived a day late. Ars sets the result against earlier breakeven demonstrations whose gains were modest, noting that each distance step improved the error by more than ten times. We could read it only through an aggregator; on Hacker News it had 2 points.</li><li><span class="label kicker">PostQuantum · analysis</span><a href="https://postquantum.com/engineering-news/ai-chip-design-quantum-decoder/"><b>AI chip design: IBM agents speed up a quantum decoder</b></a> Ivezic reworks IBM’s agent-factory preprint on the Relay-BP decoder for the gross code: the 52× and 204× speedups are high-level-synthesis estimates from single runs, the 28 ms reference latency corresponds to about 60 iterations, ten times the test set’s average, and the best agent design is still over 40× slower than IBM’s hand-written RTL on the same cases.</li><li><span class="label kicker">What’s new (Terence Tao)</span><a href="https://terrytao.wordpress.com/2026/10/20/an-experimental-ai-math-challenge-using-tenth-discriminant-bounds-to-explore-arguments-ruling-out-siegel-zeroes/"><b>An experimental AI-math challenge on Siegel zeroes</b></a> Tao invites readers to use AI tools to turn the recent Siegel-zero arguments into effective bounds on a hypothetical tenth discriminant, a day after sketching Ben Green’s streamlined proof. Not quantum, but the same AI-assisted-proof question that ran through Monday’s circuit-design argument.</li><li><span class="label kicker">Quantum Capital (Marchenkova)</span><a href="https://quantumfrontier.substack.com/p/the-quantum-tam-is-either-zero-or"><b>The quantum TAM is either zero or infinity</b></a> Marchenkova argues that market forecasts keep rising because analysts add use cases without retiring the ones classical methods have taken (materials screening, in-silico drug discovery, enterprise QML), and that the reliable near-term demand is cryptanalysis, post-quantum mandates and sensing.</li></ul></section></aside></div><section class="dept" id="picks"><div class="flag"><h2>Today’s Papers</h2><span class="label muted">listing of Wed 21 Oct · 65 new + 29 cross-lists · ranked by predicted final scites</span></div><div class="top-row"><div class="top-main"><p class="muted">#1 Polynomial-time classical simulation of BosonSampling under any constant-fraction photon loss is on the front page.</p><div class="stack"></div></div><aside class="top-aside"><section class="livebox"><h2>SciRate today <span class="status">no counts yet</span></h2><p class="empty">Today’s ranking appears here once counts for Wed 21 Oct are in.</p></section><section class="settled-box" id="settled"><h2>Yesterday, Settled <span class="status">listing of Tue 20 Oct</span></h2><ol><li><span class="r">1</span><a class="sc" data-id="2610.24077" href="https://scirate.com/arxiv/2610.24077" title="SciRate scites"><b>70</b><i>final</i></a><a href="https://arxiv.org/abs/2610.24077">Quantum error correction well below the color code threshold</a><span class="ours">we: #1</span></li><li><span class="r">2</span><a class="sc" data-id="2610.25260" href="https://scirate.com/arxiv/2610.25260" title="SciRate scites"><b>22</b><i>final</i></a><a href="https://arxiv.org/abs/2610.25260">Spatial discretization error for quantum chemistry simulation</a><span class="ours">sleeper</span></li><li><span class="r">3</span><a class="sc" data-id="2610.26784" href="https://scirate.com/arxiv/2610.26784" title="SciRate scites"><b>18</b><i>final</i></a><a href="https://arxiv.org/abs/2610.26784">High-accuracy propagation-assisted local decoding for fast transversal Clifford circuits</a><span class="ours">sleeper</span></li><li><span class="r">4</span><a class="sc" data-id="2610.26785" href="https://scirate.com/arxiv/2610.26785" title="SciRate scites"><b>17</b><i>final</i></a><a href="https://arxiv.org/abs/2610.26785">Correlated decoding loses the surface code’s effective distance below threshold</a><span class="ours">we: #3</span></li><li><span class="r">5</span><a class="sc" data-id="2610.26154" href="https://scirate.com/arxiv/2610.26154" title="SciRate scites"><b>9</b><i>final</i></a><a href="https://arxiv.org/abs/2610.26154">Quantum control as renormalization group flow</a><span class="ours">unranked</span></li><li><span class="r">6</span><a class="sc" data-id="2610.26833" href="https://scirate.com/arxiv/2610.26833" title="SciRate scites"><b>5</b><i>final</i></a><a href="https://arxiv.org/abs/2610.26833">Supervised learning with quantum Hamiltonian embeddings</a><span class="ours">we: #7</span></li><li><span class="r">7</span><a class="sc" data-id="2610.26603" href="https://scirate.com/arxiv/2610.26603" title="SciRate scites"><b>5</b><i>final</i></a><a href="https://arxiv.org/abs/2610.26603">Beyond fidelity: resolving errors in photonic seed state generation</a><span class="ours">unranked</span></li><li><span class="r">8</span><a class="sc" data-id="2610.26471" href="https://scirate.com/arxiv/2610.26471" title="SciRate scites"><b>5</b><i>final</i></a><a href="https://arxiv.org/abs/2610.26471">End-to-end optimization of partial fault tolerance in neutral-atom arrays</a><span class="ours">we: #8</span></li><li><span class="r">9</span><a class="sc" data-id="2610.25792" href="https://scirate.com/arxiv/2610.25792" title="SciRate scites"><b>5</b><i>final</i></a><a href="https://arxiv.org/abs/2610.25792">Perturbation theory for quantum information quantities of Gaussian states</a><span class="ours">unranked</span></li><li><span class="r">10</span><a class="sc" data-id="2610.25968" href="https://scirate.com/arxiv/2610.25968" title="SciRate scites"><b>4</b><i>final</i></a><a href="https://arxiv.org/abs/2610.25968">Efficient block encodings for ensembles of molecular Hamiltonians</a><span class="ours">unranked</span></li></ol><p class="scorecard"><span class="label">Scorecard</span> 2 of 5 in the top five at 8 h. Hits: Helios (70, our #1) and correlated decoding (17, our #3, fourth). Misses: we put the SW-SSB experiment on Heron second and it had no scites at 8 h; the Pauli-propagation error theory (our #4) also sat at zero, and Gavinsky’s one-line separation (our #5) had one. The two we skipped: Fang and Zhang’s rigorous discretization bounds (22) had only a trending link, and Webber et al.’s iterated local decoding (18) got one line in “also”. Our #7 and #8 finished sixth and eighth.</p></section></aside></div><div class="grid2" id="papers-rest"><article class="paper" data-id="2610.28600"><div class="rank">2</div><div><h3><a href="https://arxiv.org/abs/2610.28600">Complete modified logarithmic Sobolev inequalities for one-dimensional quantum spin chains</a></h3><div class="meta"><span>L. Gao, J. Guo, S. Wang (Wuhan University)</span><span class="mono">2610.28600</span><a class="sc" data-id="2610.28600" href="https://scirate.com/arxiv/2610.28600" title="SciRate scites"><b>—</b><i>scites</i></a><span class="conf"><span class="dots" aria-hidden="true">●●●</span> High confidence</span></div><p class="why"><span class="label">Why here</span> Gibbs-sampler mixing is the theory topic of the year, and a system-size-independent CMLSI for the Chen–Kastoryano–Gilyén sampler at every temperature in 1D is the kind of bound the algorithms crowd scites on sight.</p><div class="sum"><p>Chen, Kastoryano and Gilyén’s Lindbladian Gibbs samplers are the leading candidates for preparing thermal states on a quantum computer, and the open question is how fast they mix. For one-dimensional chains with bounded finite-range interactions, noncommuting and nonuniform allowed, the authors prove a complete modified log-Sobolev inequality at every fixed β &gt; 0: for the Gaussian or Metropolis version of the sampler, any finite reference system R and any faithful joint state ρ, 2α D(ρ‖ρ<sub>R</sub> ⊗ σ) ≤ I<sub>L</sub>(ρ), with α independent of N and of the reference dimension. Relative entropy to the Gibbs state then decays as e<sup>−2αt</sup>, giving trace and diamond mixing times O(log N + log 1/ε), which they call optimal for the class. The previous bound in this setting, from Bergamaschi and Chen’s spectral gap, was O(N + log 1/ε); logarithmic mixing was known for commuting 1D Davies dynamics and for the Gaussian CKG sampler at high temperature.</p><p>The proof has two halves. A complete spatial factorization bounds the global relative entropy by a constant times the sum of single-site conditional relative entropies with no additive error, using 1D Gibbs locality, stability of conditional relative entropy under local filtering and an interval recursion; then each single-site term is bounded by its entropy production plus regional errors with summable coefficients, which are absorbed. The static estimate also yields a size-independent CMLSI for single-site Petz heat-bath dynamics. Fifty-seven pages and no numerics; two dimensions is the obvious next target.</p></div></div></article><article class="paper" data-id="2610.27053"><div class="rank">3</div><div><h3><a href="https://arxiv.org/abs/2610.27053">Parallel omnidirectional atom rearrangement with dynamic holograms</a></h3><div class="meta"><span>S. A. Engel, D. Gong, Z. Lin, L. Christakis, K.-K. Ni, N. Y. Yao (Harvard)</span><span class="mono">2610.27053</span><a class="sc" data-id="2610.27053" href="https://scirate.com/arxiv/2610.27053" title="SciRate scites"><b>—</b><i>scites</i></a><span class="conf"><span class="dots" aria-hidden="true">●●○</span> Medium confidence</span></div><p class="why"><span class="label">Why here</span> A 2,078-site ytterbium array at 99% filling from the Ni and Yao labs is the largest tweezer-assembly number in months, but it is a physics.atom-ph cross-list, and cross-lists collect fewer quant-ph scites.</p><div class="sum"><p>Rearranging a tweezer array with a spatial light modulator is slow because the liquid crystal has to settle between holograms. Engel, Gong, Lin, Christakis, Ni and Yao drive a kHz-rate SLM (minimum frame period about 0.7 ms, settle time 1.6 ms) with new frames before the crystal has settled, and show by measuring survival and heating that ytterbium atoms stay trapped: radial speed rises threefold to 0.75 µm/ms as the frame period drops from 2.8 to 0.7 ms, axial speed to 3.86 µm/ms, and 0.2 µm radial steps show no loss over about 2,000 steps. Holograms are computed in real time by a warm-started weighted Gerchberg–Saxton algorithm that converges in about three iterations at 2048×2048 in 0.65 ms, matching their trained SLMnet network without any training.</p><p>With that they rearrange 2,071 atoms into a 2,078-site kagome lattice, 99.0% mean filling over 195 shots, in a median 56 ms, and move atoms between the layers of a 536-site bilayer (96.7% filling). One rearrangement round only; fidelity is limited by imaging loss, array size by laser power, and the modified 532 nm liquid crystal sends about 7% of the light into other diffraction orders. The authors say the method ports to any SLM-based tweezer platform.</p></div></div></article><article class="paper" data-id="2610.28538"><div class="rank">4</div><div><h3><a href="https://arxiv.org/abs/2610.28538">NeST: ultra-high-rate qLDPC codes with sub-50 µs stabiliser cycles via spin shuttling</a></h3><div class="meta"><span>A. Siegel (Quantum Motion)</span><span class="mono">2610.28538</span><a class="sc" data-id="2610.28538" href="https://scirate.com/arxiv/2610.28538" title="SciRate scites"><b>—</b><i>scites</i></a><span class="conf"><span class="dots" aria-hidden="true">●●○</span> Medium confidence</span></div><p class="why"><span class="label">Why here</span> A qLDPC architecture with circuit-level thresholds and a 10<sup>−14</sup> extrapolation fits the fault-tolerance-architecture pattern that out-scites everything but headline experiments, though a single author at a startup and a 30-page read will slow it.</p><div class="sum"><p>High-rate qLDPC codes need long-range, block-wise qubit transport, which tweezers supply in milliseconds. Siegel asks which group actions electron shuttling on fabricated tracks can perform without collisions, and builds codes around those groups. A looped conveyor belt implements a cyclic group as a rigid global motion; nesting loops gives semidirect products, with a reflection obtained by entering the destination loop backwards, a family G(n, σ) that covers all finite abelian groups and some non-Abelian ones. The codes are “mitten” codes, lifted products with 1×2 base matrices of weight-3 entries, rate 1/5 and check weight 9, searched for base groups that fit; the largest found is [[1400, 280, ≤28]].</p><p>Data qubits stay still and only ancillas move, at 50 m/s on a 1 µm grid, with shuttling dephasing p<sub>sh</sub> per µm on top of uniform depolarizing noise at p and quasi-static dephasing with T<sub>2</sub>* = 20 µs on idling ancillas. Circuit-level thresholds exceed 10<sup>−3</sup>; syndrome cycles take 16–30 µs for the smaller codes and an estimated 42 µs for the largest, and the mitten codes match or beat same-distance surface codes up to p<sub>sh</sub> = p/20. A [[150, 30, 10]] surgery gadget keeps rigid belt motions at no qubit cost and 29% more layers.</p><p>The 10<sup>−14</sup> figure is a straight-line extrapolation the author calls rough: no circuit distance was computed for the 1,400-qubit code, noise grows with code size, and inter-cell scheduling is left open.</p></div></div></article><article class="paper" data-id="2610.27939"><div class="rank">5</div><div><h3><a href="https://arxiv.org/abs/2610.27939">Local-channel stability of classical Z<sub>2</sub> lattice gauge models</a></h3><div class="meta"><span>G. Xun, W. Cao, H. Watanabe (Tokyo)</span><span class="mono">2610.27939</span><a class="sc" data-id="2610.27939" href="https://scirate.com/arxiv/2610.27939" title="SciRate scites"><b>—</b><i>scites</i></a><span class="conf"><span class="dots" aria-hidden="true">●●○</span> Medium confidence</span></div><p class="why"><span class="label">Why here</span> Local-channel stability of classical gauge models is the thread Monday’s stable-spin-model paper (19 scites) pulled on, and Watanabe’s name carries in the many-body crowd.</p><div class="sum"><p>Which classical gauge models keep their low-temperature phase under local perturbations, when the comparison is made with local quantum channels rather than with a symmetry? Xun, Cao and Watanabe take Z<sub>2</sub> models with spins on m-cells of a d-dimensional lattice and interactions on (m+1)-cell boundaries, on the full Hilbert space with no Gauss law, so the family includes the Ising model (m = 0) and the magnetic sector of the toric code (m = 1). For 1 ≤ m ≤ d − 2, sufficiently weak local classical perturbations at low enough positive temperature leave the state two-way equivalent to the canonical flat ensemble under local channels with product ancillas, polylogarithmic causal radius and any inverse-power trace-norm error. No symmetry of the perturbation is needed; the ingredients are locally indistinguishable flat sectors and extended magnetic defects of dimension d − m − 1.</p><p>Weak noncommuting perturbations get the same conclusion in a smaller window, by reducing the diagonal to a classical interaction and restoring the coherences with a local channel. High temperature is two-way equivalent to a product state, and an optimized covariance between distant parallel m-tori, nonincreasing under one-way conversion, takes the values 1 and 0 in the two proven regimes. The authors say the sufficient domains do not fix the full phase diagram; it reads as the classical companion to Monday’s stable spin model from Balasubramanian, Davydova, Lin and Thorngren.</p></div></div></article></div><div class="grid3 papers-small"><article class="paper small" data-id="2610.27854"><div class="rank">6</div><div><h3><a href="https://arxiv.org/abs/2610.27854">Trapped-ion-based quantum repeater node across a 17 km metropolitan fiber</a></h3><div class="meta"><span>K. Fabitha, …, T. E. Northup, V. Krutyanskiy, B. P. Lanyon (Innsbruck)</span><span class="mono">2610.27854</span><a class="sc" data-id="2610.27854" href="https://scirate.com/arxiv/2610.27854" title="SciRate scites"><b>—</b><i>scites</i></a><span class="conf"><span class="dots" aria-hidden="true">●○○</span> Low-Med confidence</span></div><p class="why"><span class="label">Why here</span> Networking experiments draw steady but modest scites; a city-fibre repeater node from Lanyon’s group with an 81.6% Bell fidelity should sit near ten.</p><div class="sum"><p>Two ions in an optical cavity act as a repeater node whose photons travel a 17 km deployed fibre across Innsbruck. The paper first characterizes the channel and the ion–photon entanglement distributed across it, then runs the node protocol, which leaves a photon at the node entangled with one that has crossed the fibre, at a Bell-state fidelity of 81.6 (+1.9/−1.4)%. It is one node rather than a concatenation, and rates are not in the abstract, but it is the first trapped-ion repeater step on city fibre, moving the earlier lab demonstrations out of the building.</p></div></div></article><article class="paper small" data-id="2610.28336"><div class="rank">7</div><div><h3><a href="https://arxiv.org/abs/2610.28336">Floquet ground state order</a></h3><div class="meta"><span>S. Mondal, P. M. Schindler, M. Bukov (MPI-PKS Dresden)</span><span class="mono">2610.28336</span><a class="sc" data-id="2610.28336" href="https://scirate.com/arxiv/2610.28336" title="SciRate scites"><b>—</b><i>scites</i></a><span class="conf"><span class="dots" aria-hidden="true">●○○</span> Low-Med confidence</span></div><p class="why"><span class="label">Why here</span> Bukov’s geometric Floquet theory has a following and “ground-state time crystals” is a phrase that travels, but 42 pages of dynamics theory is a slow burn.</p><div class="sum"><p>Driven interacting systems are supposed to heat to infinite temperature. Mondal, Schindler and Bukov split Floquet evolution into geometric and average-energy parts and define the Floquet ground state as the ground state of the average-energy operator, with a variational principle and an MPS algorithm to find it. In driven nonintegrable chains of more than 100 spins the state is gapped, with area-law entanglement, over extended parameter regions, hosting Floquet antiferromagnets and ground-state time crystals, with transitions where the average-energy gap closes. Stability against heating is attributed to quasilocal counterdiabatic driving. The claim that these states evade ETH will get the sharpest reading.</p></div></div></article><article class="paper small" data-id="2610.28008"><div class="rank">8</div><div><h3><a href="https://arxiv.org/abs/2610.28008">Certified non-degenerate maximum-likelihood benchmarking of quantum LDPC decoders</a></h3><div class="meta"><span>M. Banfi, M. Ferrari, A. Favano, A. Tarable, L. Barletta (Milan)</span><span class="mono">2610.28008</span><a class="sc" data-id="2610.28008" href="https://scirate.com/arxiv/2610.28008" title="SciRate scites"><b>—</b><i>scites</i></a><span class="conf"><span class="dots" aria-hidden="true">●○○</span> Low-Med confidence</span></div><p class="why"><span class="label">Why here</span> Two decoder papers took third and fourth place yesterday; a shot-level maximum-likelihood certificate is the kind of benchmarking tool decoder people adopt, though it is a cs.IT cross-list.</p><div class="sum"><p>A decoder’s logical error rate only means something against the best possible decoder. Banfi, Ferrari, Favano, Tarable and Barletta certify, per sampled shot under circuit-level noise, whether non-degenerate maximum-likelihood decoding would succeed: upper and lower bounds on the minimum correction cost in the true and competing logical classes label each shot success, failure or undecided, with branch-and-bound tightening the bounds under a resource limit. Counting gives an interval on the ML error rate whose width is the undecided fraction. On two bivariate bicycle codes, best-first OSD tracks the benchmark closely but leaves some ML-correctable shots on the table. Degenerate ML is not addressed.</p></div></div></article></div><section class="second-look"><h3 class="label kicker">Worth a second look · from yesterday’s listing, missed by our forecast</h3><div class="gridn cols-2"><article class="paper small mini"><div><div class="was label">Yesterday’s #2 on SciRate</div><h3><a href="https://arxiv.org/abs/2610.25260">Spatial discretization error for quantum chemistry simulation</a></h3><div class="meta"><span>D. Fang, J. Zhang</span><a class="sc" data-id="2610.25260" href="https://scirate.com/arxiv/2610.25260" title="SciRate scites"><b>22</b><i>final</i></a></div><div class="sum"><p>Quantum chemistry algorithms are costed in a finite basis, but the continuum Schrödinger equation is the target. Fang and Zhang give a Sobolev–Galerkin framework for the spatial discretization error of unbounded many-body Coulomb Hamiltonians, with periodization and Galerkin bounds for both dynamics and ground-state energies. The rates differ: the ground-state energy converges as M<sup>−1</sup> in the number of one-particle basis functions, sharply, while no uniform M<sup>−1</sup> rate exists for the real-time wavefunction with general H<sup>2</sup> data, because a dynamical projection error enters at its own rate. Combined with current algorithms, they claim the first end-to-end complexity bounds for molecular dynamics with every spatial error controlled. We gave it a trending link; 22 scites says the algorithms community wants rigor at the basis-set step.</p></div></div></article><article class="paper small mini"><div><div class="was label">Yesterday’s #3 on SciRate</div><h3><a href="https://arxiv.org/abs/2610.26784">High-accuracy propagation-assisted local decoding for fast transversal Clifford circuits</a></h3><div class="meta"><span>M. Webber, S. Sadana, M. A. Lane, L. J. Robson, A. O’Rourke</span><a class="sc" data-id="2610.26784" href="https://scirate.com/arxiv/2610.26784" title="SciRate scites"><b>18</b><i>final</i></a></div><div class="sum"><p>An iterative redecode scheme for fast transversal Clifford circuits: local MWPM on memory-equivalent detector error models, alternated with Pauli-frame propagation and detector updates across transversal CNOT layers, so that local decoders agree with the global detector record without ever building a global hypergraph. At d = 11 on deep random Clifford circuits it fails about 4× less often than the ghost protocol and 15× less than logical-observable matching; three-block GHZ preparation gains 2× (25× at d = 19), repeated logical S gates 4–10×. Error rates saturate after a few iterations, buffers of ⌊d/4⌋ suffice, and circuits and data are on Zenodo. One line in “also” was too little for a decoder paper with public data; it finished third.</p></div></div></article></div></section><p class="also"><span class="label">Also notable</span> <a href="https://arxiv.org/abs/2610.27596">Stabilizer Rényi moments beyond entanglement</a> <span class="muted">(V. Jejjala, J. Naskar)</span> Stabilizer Rényi moments can decay with a different exponent in two critical chains with identical entanglement spectra; an on-site rotation of the Ising chain is the exact example, with a Pfaffian form for growing intervals. · <a href="https://arxiv.org/abs/2610.27260">Optimal four-copy detection of the three-tangle and its fault-tolerant cost</a> <span class="muted">(F. T. B. Pérez, B. Casas, I-C. Chen, S. Y. Chang, P. Schleich, M. Cerezo)</span> The statistically optimal one-sided four-copy detector of τ<sub>3</sub> clicks with probability τ<sub>3</sub><sup>2</sup>/48, 16/3 times better than before, in 15 CNOTs; its encoded cost is priced on the Steane and [[8,3,2]] codes. · <a href="https://arxiv.org/abs/2610.27872">Moments of random permanents and hafnians: a replica approach</a> <span class="muted">(P. Facchi, A. Mariano, G. Parisi, S. Pascazio, A. Scardicchio)</span> The 2k-th moment of random permanents and hafnians as a replica calculation: replica-symmetric for k &gt; 2 with closed-form growth rate and 1/N correction, and a bulk–tail separation at k = 2, relevant to boson-sampling anticoncentration. · <a href="https://arxiv.org/abs/2610.27556">Hybrid lattice surgery between smooth boundaries</a> <span class="muted">(G. Ding, Y. Chen, S.-J. Huang)</span> Smooth-boundary merge and split between group surface codes, non-Abelian groups included, realize a logical K-coset measurement and prepare T, CZ, CCX and CS magic states in Z<sub>2</sub> patches. · <a href="https://arxiv.org/abs/2610.28528">Efficient ground-state manifold amplification for Rydberg atom arrays via Houdayer cluster updates</a> <span class="muted">(A. J. Ochoa, M. J. A. Schuetz, H. G. Katzgraber)</span> Classical Houdayer cluster updates expand the maximum-independent-set solution sets sampled on QuEra’s Aquila by a median 24× on 43 instances with known degeneracies, recovering a median 21% of the ground-state manifold.</p></section><section class="dept" id="trending"><div class="flag"><h2>Trending</h2><span class="label muted">share of each listing, 12 listings</span></div><p class="trend-intro">Classical simulation is small on arXiv and owns the front page again, while hardware and networking carry the volume this week; error correction is below its recent share after a Tuesday in which decoders took two of the top four places.</p><div class="trends"><article class="trend"><div class="trend-head"><h3>Classical simulation</h3><span class="heat heat-hot">Hot</span></div><div class="trend-nums"><svg class="spark" viewBox="0 0 120 30" width="120" height="30" aria-hidden="true"><polygon points="2,28 2.0,5.7 12.5,9.8 23.1,14.5 33.6,23.8 44.2,18.9 54.7,16.5 65.3,11.0 75.8,19.8 86.4,5.0 96.9,19.0 107.5,20.4 118.0,15.5 118.0,28" class="spark-area"/><polyline points="2.0,5.7 12.5,9.8 23.1,14.5 33.6,23.8 44.2,18.9 54.7,16.5 65.3,11.0 75.8,19.8 86.4,5.0 96.9,19.0 107.5,20.4 118.0,15.5" class="spark-line"/><circle cx="118.0" cy="15.5" r="2.6" class="spark-dot"/></svg><span class="mono">4 today · 4% of the week · 14 scites/paper · 5 of 50 top-10 slots · 37% cross-listed</span></div><p>Four papers and the lead story. Go and Jeong’s constant-fraction loss result (pick #1) moves the provable boundary for Fock-state boson sampling; Facchi, Parisi and colleagues compute moments of random permanents and hafnians by replicas; Santos and Bashford-Rogers push bidirectional path-integral Monte Carlo to 4,096-qubit circuits, without error control; and Timofeev, Hryniuk and Szymańska’s SU(2)-covariant truncated-Wigner method reaches 400-site dissipative lattices, finding that long-range interactions stabilize a Z<sub>2</sub>-ordered phase that vortices destroy at short range. The field keeps the highest scites per paper of any.</p><p class="src"><a href="https://arxiv.org/abs/2610.27065">Lossy BosonSampling in polynomial time</a> · <a href="https://arxiv.org/abs/2610.27872">Moments of random permanents</a> · <a href="https://arxiv.org/abs/2610.27462">Truncated Wigner for open spins</a></p></article><article class="trend"><div class="trend-head"><h3>Error correction</h3><span class="heat heat-steady">Steady</span></div><div class="trend-nums"><svg class="spark" viewBox="0 0 120 30" width="120" height="30" aria-hidden="true"><polygon points="2,28 2.0,5.0 12.5,9.7 23.1,16.1 33.6,19.8 44.2,18.5 54.7,18.2 65.3,17.7 75.8,7.7 86.4,11.4 96.9,21.9 107.5,17.3 118.0,19.8 118.0,28" class="spark-area"/><polyline points="2.0,5.0 12.5,9.7 23.1,16.1 33.6,19.8 44.2,18.5 54.7,18.2 65.3,17.7 75.8,7.7 86.4,11.4 96.9,21.9 107.5,17.3 118.0,19.8" class="spark-line"/><circle cx="118.0" cy="19.8" r="2.6" class="spark-dot"/></svg><span class="mono">8 today · 13% of the week · 12 scites/paper · 24 of 50 top-10 slots · 15% cross-listed</span></div><p>Eight papers, below its recent share. NeST (pick #4) co-designs lifted-product “mitten” codes with silicon spin shuttling tracks; Banfi et al. (pick #8) certify maximum-likelihood outcomes shot by shot for bivariate bicycle codes; Ding, Chen and Huang extend lattice surgery to smooth boundaries of group surface codes with non-Abelian groups; Cerezo’s group prices a three-tangle detector in the Steane and [[8,3,2]] codes. In the news, Alice &amp; Bob’s PROQCIMA demonstrators ran a distance-3 repetition code above threshold, Ars Technica caught up with Helios, and PostQuantum took apart IBM’s agent-designed decoder numbers.</p><p class="src"><a href="https://arxiv.org/abs/2610.28538">NeST shuttling architecture</a> · <a href="https://arxiv.org/abs/2610.28008">Certified ML benchmarking of QLDPC decoders</a> · <a href="https://arxiv.org/abs/2610.27556">Hybrid lattice surgery</a></p></article><article class="trend"><div class="trend-head"><h3>Information theory</h3><span class="heat heat-steady">Steady</span></div><div class="trend-nums"><svg class="spark" viewBox="0 0 120 30" width="120" height="30" aria-hidden="true"><polygon points="2,28 2.0,9.1 12.5,7.2 23.1,5.0 33.6,14.2 44.2,6.9 54.7,7.0 65.3,11.3 75.8,6.5 86.4,7.7 96.9,14.6 107.5,10.5 118.0,9.4 118.0,28" class="spark-area"/><polyline points="2.0,9.1 12.5,7.2 23.1,5.0 33.6,14.2 44.2,6.9 54.7,7.0 65.3,11.3 75.8,6.5 86.4,7.7 96.9,14.6 107.5,10.5 118.0,9.4" class="spark-line"/><circle cx="118.0" cy="9.4" r="2.6" class="spark-dot"/></svg><span class="mono">14 today · 15% of the week · 6 scites/paper · 10 of 50 top-10 slots · 28% cross-listed</span></div><p>Fourteen papers, led by the Wuhan complete MLSI for Gibbs samplers on chains (pick #2). Akella and Gadde show that the n → 1 continuation of the Rényi multi-entropy of graph states is not an entanglement monotone; Morelli gives dimension-free marginal inequalities for pure three-party states, complete up to local dimension 4; Meroi et al. reduce optimal approximate conversion in three majorization-based resource theories to four taut-string constructions; Albarelli, Chessa and Rubio extend the factor-of-two incompatibility bound in Bayesian multiparameter estimation beyond quadratic loss.</p><p class="src"><a href="https://arxiv.org/abs/2610.28600">CMLSI for 1D Gibbs samplers</a> · <a href="https://arxiv.org/abs/2610.27080">Multi-entropy of graph states</a> · <a href="https://arxiv.org/abs/2610.28162">Dimension-free marginal inequalities</a></p></article><article class="trend"><div class="trend-head"><h3>Many-body &amp; dynamics</h3><span class="heat heat-steady">Steady</span></div><div class="trend-nums"><svg class="spark" viewBox="0 0 120 30" width="120" height="30" aria-hidden="true"><polygon points="2,28 2.0,9.2 12.5,11.2 23.1,13.0 33.6,14.5 44.2,5.7 54.7,6.9 65.3,8.4 75.8,9.4 86.4,10.6 96.9,8.1 107.5,11.0 118.0,5.0 118.0,28" class="spark-area"/><polyline points="2.0,9.2 12.5,11.2 23.1,13.0 33.6,14.5 44.2,5.7 54.7,6.9 65.3,8.4 75.8,9.4 86.4,10.6 96.9,8.1 107.5,11.0 118.0,5.0" class="spark-line"/><circle cx="118.0" cy="5.0" r="2.6" class="spark-dot"/></svg><span class="mono">36 today · 31% of the week · 7 scites/paper · 13 of 50 top-10 slots · 38% cross-listed</span></div><p>The usual largest share at 36 papers. Xun, Cao and Watanabe (pick #5) prove two-way local-channel stability for classical Z<sub>2</sub> gauge models without a protecting symmetry; Bukov’s group (pick #7) finds gapped Floquet ground states in 100-spin driven chains; Wang, Liu and Yan show that the orientation of a lattice bipartition survives in the Rényi-2 ensemble at a deconfined critical point; Kuriyattil, Kombe, Daley and Poggi switch a long-range XY model between collective and scrambling dynamics by perturbing the initial state; Jejjala and Naskar separate stabilizer Rényi moments from entanglement spectra in critical chains.</p><p class="src"><a href="https://arxiv.org/abs/2610.27939">Local-channel stability of Z2 gauge models</a> · <a href="https://arxiv.org/abs/2610.28336">Floquet ground state order</a> · <a href="https://arxiv.org/abs/2610.27587">Bipartition in the Rényi ensemble</a></p></article><article class="trend"><div class="trend-head"><h3>Devices &amp; hardware</h3><span class="heat heat-rising">Rising</span></div><div class="trend-nums"><svg class="spark" viewBox="0 0 120 30" width="120" height="30" aria-hidden="true"><polygon points="2,28 2.0,15.7 12.5,18.1 23.1,12.6 33.6,10.1 44.2,8.8 54.7,7.7 65.3,7.8 75.8,5.0 86.4,6.8 96.9,12.2 107.5,6.0 118.0,7.7 118.0,28" class="spark-area"/><polyline points="2.0,15.7 12.5,18.1 23.1,12.6 33.6,10.1 44.2,8.8 54.7,7.7 65.3,7.8 75.8,5.0 86.4,6.8 96.9,12.2 107.5,6.0 118.0,7.7" class="spark-line"/><circle cx="118.0" cy="7.7" r="2.6" class="spark-dot"/></svg><span class="mono">22 today · 24% of the week · 8 scites/paper · 9 of 50 top-10 slots · 23% cross-listed</span></div><p>Twenty-two papers, the largest relative rise. Harvard’s kHz-rate SLM rearrangement (pick #3) assembles 2,078-site ytterbium kagome arrays at 99.0% filling; the Schuster and Lehnert groups replace readout isolators with an on-chip tunable inductive bridge that suppresses amplifier-noise dephasing by over 30 dB; Ahn and Manucharyan build a 500-SNAIL K-band amplifier with 20 dB of gain from 19.6 to 25.6 GHz at 0.73 quanta of added noise; Möttönen’s group implements bitstring-conditioned rotations for general two-qubit unitaries at 97.6%. Industry: an ETH spin-off for ion and atom control, and IQM time for DLR.</p><p class="src"><a href="https://arxiv.org/abs/2610.27053">Dynamic-hologram atom rearrangement</a> · <a href="https://arxiv.org/abs/2610.27137">Tunable inductive bridge for readout</a> · <a href="https://arxiv.org/abs/2610.27743">K-band parametric amplifier</a></p></article><article class="trend"><div class="trend-head"><h3>Communication &amp; crypto</h3><span class="heat heat-rising">Rising</span></div><div class="trend-nums"><svg class="spark" viewBox="0 0 120 30" width="120" height="30" aria-hidden="true"><polygon points="2,28 2.0,6.8 12.5,10.5 23.1,15.0 33.6,7.4 44.2,7.8 54.7,17.4 65.3,14.2 75.8,9.3 86.4,8.9 96.9,9.4 107.5,5.2 118.0,5.0 118.0,28" class="spark-area"/><polyline points="2.0,6.8 12.5,10.5 23.1,15.0 33.6,7.4 44.2,7.8 54.7,17.4 65.3,14.2 75.8,9.3 86.4,8.9 96.9,9.4 107.5,5.2 118.0,5.0" class="spark-line"/><circle cx="118.0" cy="5.0" r="2.6" class="spark-dot"/></svg><span class="mono">14 today · 13% of the week · 4 scites/paper · 5 of 50 top-10 slots · 23% cross-listed</span></div><p>Fourteen papers, up on its recent share. Lanyon’s group (pick #6) runs a trapped-ion repeater node over 17 km of Innsbruck fibre; a Korean team co-propagates decoy-state BB84 with classical laser communication through one aperture over 10.3 km from a mobile platform, at 644 bps; Shimizu et al. show that hollow-core fibre cuts background noise for entanglement alongside 11.2 dBm of DWDM traffic by two orders of magnitude; Hu et al. find the minimum persistent switch memory for graph-state distribution and an online stabilizer-transition protocol that attains it; Lim and Lo teleport two qubits in parallel through an AME(5,2) state on ibm_pittsburgh.</p><p class="src"><a href="https://arxiv.org/abs/2610.27854">Ion repeater node on city fibre</a> · <a href="https://arxiv.org/abs/2610.28596">Switch memory limits for graph states</a> · <a href="https://arxiv.org/abs/2610.27540">Hollow-core fibre coexistence</a></p></article></div><div class="tgrid"><div class="trow thead"><span class="label">Subfield</span><span class="label">last 15 listings</span><span class="label">today</span><span class="label">share, 5 listings</span><span class="label">scites/paper</span><span class="label">top-10 slots</span><span class="label">cross-listed</span></div><div class="trow"><span class="tname">Many-body &amp; dynamics</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,7.7 9.8,9.0 17.6,10.1 25.5,11.1 33.3,5.5 41.1,6.2 48.9,7.1 56.7,7.8 64.5,8.6 72.4,7.0 80.2,8.8 88.0,5.0 88.0,20" class="spark-area"/><polyline points="2.0,7.7 9.8,9.0 17.6,10.1 25.5,11.1 33.3,5.5 41.1,6.2 48.9,7.1 56.7,7.8 64.5,8.6 72.4,7.0 80.2,8.8 88.0,5.0" class="spark-line"/><circle cx="88.0" cy="5.0" r="2.6" class="spark-dot"/></svg><span class="mono">36</span><span class="mono">31% ▸</span><span class="mono">7</span><span class="mono">13/50</span><span class="mono">38%</span></div><div class="trow"><span class="tname">Devices &amp; hardware</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,11.8 9.8,13.4 17.6,9.8 25.5,8.2 33.3,7.4 41.1,6.7 48.9,6.8 56.7,5.0 64.5,6.1 72.4,9.6 80.2,5.7 88.0,6.7 88.0,20" class="spark-area"/><polyline points="2.0,11.8 9.8,13.4 17.6,9.8 25.5,8.2 33.3,7.4 41.1,6.7 48.9,6.8 56.7,5.0 64.5,6.1 72.4,9.6 80.2,5.7 88.0,6.7" class="spark-line"/><circle cx="88.0" cy="6.7" r="2.6" class="spark-dot"/></svg><span class="mono">22</span><span class="mono">24% ▲</span><span class="mono">8</span><span class="mono">9/50</span><span class="mono">23%</span></div><div class="trow"><span class="tname">Optics &amp; AMO</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,11.7 9.8,13.1 17.6,12.4 25.5,8.4 33.3,8.0 41.1,12.2 48.9,8.4 56.7,7.9 64.5,9.6 72.4,13.1 80.2,10.4 88.0,5.0 88.0,20" class="spark-area"/><polyline points="2.0,11.7 9.8,13.1 17.6,12.4 25.5,8.4 33.3,8.0 41.1,12.2 48.9,8.4 56.7,7.9 64.5,9.6 72.4,13.1 80.2,10.4 88.0,5.0" class="spark-line"/><circle cx="88.0" cy="5.0" r="2.6" class="spark-dot"/></svg><span class="mono">30</span><span class="mono">23% ▸</span><span class="mono">3</span><span class="mono">4/50</span><span class="mono">32%</span></div><div class="trow"><span class="tname">Algorithms &amp; complexity</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,9.0 9.8,5.0 17.6,10.1 25.5,9.2 33.3,10.9 41.1,9.6 48.9,7.9 56.7,13.0 64.5,9.3 72.4,8.9 80.2,9.4 88.0,13.7 88.0,20" class="spark-area"/><polyline points="2.0,9.0 9.8,5.0 17.6,10.1 25.5,9.2 33.3,10.9 41.1,9.6 48.9,7.9 56.7,13.0 64.5,9.3 72.4,8.9 80.2,9.4 88.0,13.7" class="spark-line"/><circle cx="88.0" cy="13.7" r="2.6" class="spark-dot"/></svg><span class="mono">11</span><span class="mono">18% ▼</span><span class="mono">9</span><span class="mono">15/50</span><span class="mono">17%</span></div><div class="trow"><span class="tname">Information theory</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,7.6 9.8,6.4 17.6,5.0 25.5,10.8 33.3,6.2 41.1,6.3 48.9,9.0 56.7,6.0 64.5,6.7 72.4,11.1 80.2,8.5 88.0,7.8 88.0,20" class="spark-area"/><polyline points="2.0,7.6 9.8,6.4 17.6,5.0 25.5,10.8 33.3,6.2 41.1,6.3 48.9,9.0 56.7,6.0 64.5,6.7 72.4,11.1 80.2,8.5 88.0,7.8" class="spark-line"/><circle cx="88.0" cy="7.8" r="2.6" class="spark-dot"/></svg><span class="mono">14</span><span class="mono">15% ▸</span><span class="mono">6</span><span class="mono">10/50</span><span class="mono">28%</span></div><div class="trow"><span class="tname">Error correction</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,5.0 9.8,8.0 17.6,12.1 25.5,14.4 33.3,13.6 41.1,13.4 48.9,13.1 56.7,6.7 64.5,9.1 72.4,15.8 80.2,12.8 88.0,14.4 88.0,20" class="spark-area"/><polyline points="2.0,5.0 9.8,8.0 17.6,12.1 25.5,14.4 33.3,13.6 41.1,13.4 48.9,13.1 56.7,6.7 64.5,9.1 72.4,15.8 80.2,12.8 88.0,14.4" class="spark-line"/><circle cx="88.0" cy="14.4" r="2.6" class="spark-dot"/></svg><span class="mono">8</span><span class="mono">13% ▸</span><span class="mono">12</span><span class="mono">24/50</span><span class="mono">15%</span></div><div class="trow"><span class="tname">Communication &amp; crypto</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,6.2 9.8,8.5 17.6,11.3 25.5,6.5 33.3,6.8 41.1,12.9 48.9,10.8 56.7,7.7 64.5,7.5 72.4,7.8 80.2,5.1 88.0,5.0 88.0,20" class="spark-area"/><polyline points="2.0,6.2 9.8,8.5 17.6,11.3 25.5,6.5 33.3,6.8 41.1,12.9 48.9,10.8 56.7,7.7 64.5,7.5 72.4,7.8 80.2,5.1 88.0,5.0" class="spark-line"/><circle cx="88.0" cy="5.0" r="2.6" class="spark-dot"/></svg><span class="mono">14</span><span class="mono">13% ▲</span><span class="mono">4</span><span class="mono">5/50</span><span class="mono">23%</span></div><div class="trow"><span class="tname">Sensing &amp; metrology</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,10.8 9.8,13.1 17.6,11.9 25.5,15.8 33.3,12.0 41.1,12.2 48.9,5.0 56.7,10.8 64.5,11.8 72.4,9.8 80.2,8.9 88.0,11.5 88.0,20" class="spark-area"/><polyline points="2.0,10.8 9.8,13.1 17.6,11.9 25.5,15.8 33.3,12.0 41.1,12.2 48.9,5.0 56.7,10.8 64.5,11.8 72.4,9.8 80.2,8.9 88.0,11.5" class="spark-line"/><circle cx="88.0" cy="11.5" r="2.6" class="spark-dot"/></svg><span class="mono">8</span><span class="mono">10% ▸</span><span class="mono">7</span><span class="mono">2/50</span><span class="mono">20%</span></div><div class="trow"><span class="tname">Foundations</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,8.9 9.8,8.6 17.6,5.0 25.5,9.3 33.3,8.0 41.1,11.2 48.9,11.2 56.7,13.6 64.5,11.8 72.4,7.0 80.2,7.5 88.0,9.4 88.0,20" class="spark-area"/><polyline points="2.0,8.9 9.8,8.6 17.6,5.0 25.5,9.3 33.3,8.0 41.1,11.2 48.9,11.2 56.7,13.6 64.5,11.8 72.4,7.0 80.2,7.5 88.0,9.4" class="spark-line"/><circle cx="88.0" cy="9.4" r="2.6" class="spark-dot"/></svg><span class="mono">9</span><span class="mono">9% ▸</span><span class="mono">4</span><span class="mono">4/50</span><span class="mono">17%</span></div><div class="trow"><span class="tname">Quantum learning</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,10.6 9.8,12.7 17.6,10.4 25.5,5.0 33.3,9.5 41.1,5.3 48.9,11.3 56.7,14.8 64.5,12.5 72.4,6.4 80.2,12.1 88.0,15.6 88.0,20" class="spark-area"/><polyline points="2.0,10.6 9.8,12.7 17.6,10.4 25.5,5.0 33.3,9.5 41.1,5.3 48.9,11.3 56.7,14.8 64.5,12.5 72.4,6.4 80.2,12.1 88.0,15.6" class="spark-line"/><circle cx="88.0" cy="15.6" r="2.6" class="spark-dot"/></svg><span class="mono">3</span><span class="mono">6% ▼</span><span class="mono">8</span><span class="mono">5/50</span><span class="mono">21%</span></div><div class="trow"><span class="tname">Classical simulation</span><svg class="spark" viewBox="0 0 90 22" width="90" height="22" aria-hidden="true"><polygon points="2,20 2.0,5.4 9.8,8.1 17.6,11.0 25.5,16.9 33.3,13.9 41.1,12.3 48.9,8.8 56.7,14.4 64.5,5.0 72.4,13.9 80.2,14.8 88.0,11.7 88.0,20" class="spark-area"/><polyline points="2.0,5.4 9.8,8.1 17.6,11.0 25.5,16.9 33.3,13.9 41.1,12.3 48.9,8.8 56.7,14.4 64.5,5.0 72.4,13.9 80.2,14.8 88.0,11.7" class="spark-line"/><circle cx="88.0" cy="11.7" r="2.6" class="spark-dot"/></svg><span class="mono">4</span><span class="mono">4% ▼</span><span class="mono">14</span><span class="mono">5/50</span><span class="mono">37%</span></div></div></section><section class="dept" id="news"><div class="flag"><h2>Industry &amp; Startups</h2><span class="label muted">since Tuesday</span></div><div class="news"><article class="item "><div><div class="label kicker">Switzerland · spin-off</div><h3>ETH spin-off Qendra builds the controller for ion and atom machines</h3></div><div><p>Qendra AG, founded in February by ETH alumni Martin Stadler, Ferdinand Felder and Chidzahi Mabritto, builds a central control system for trapped-ion and neutral-atom computers that generates and coordinates the signals for lasers and detectors and can evaluate measurements during a run to choose correction pulses. It is at the minimum-viable-product stage with four employees and plans for seven by year end; the first users are Jonathan Home’s ETH group and the spin-off ZuriQ, it is in talks with QuEra and Lukin’s Harvard group, and it is looking for investors.</p><div class="src"><a href="https://ethz.ch/en/news-and-events/eth-news/news/2026/10/spin-off-developing-conductors-for-quantum-computers.html">ETH News</a></div></div></article><article class="item "><div><div class="label kicker">Germany · cloud access</div><h3>Bechtle gives DLR’s quantum initiative time on IQM machines to June 2027</h3></div><div><p>Under a framework agreement announced on 20 October, DLR QCI gets cloud computing time on IQM’s superconducting systems through the Resonance platform, plus dedicated classical compute at IQM’s Munich data center for hybrid workloads, adding to a portfolio that already spans ion traps, neutral atoms, photons and NV centers. Bechtle manages the accounts; no value was disclosed.</p><div class="src"><a href="https://iqm.tech/press-releases/bechtle-expands-dlr-quantum-computing-resources-with-iqm-technology/">IQM press release</a></div></div></article></div><div class="briefs"><b>Briefs</b><ul><li>Quandela and FPT, Vietnam’s largest private IT group, sign a two-year MoU on joint research, cloud access for FPT researchers, education and ecosystem work in Vietnam (<a href="https://www.quandela.com/newsroom-posts/quandela-fpt-partner-quantum-computing-vietnam/">Quandela</a>)</li><li>Monarch Quantum supplies integrated photonics engines to Infleqtion for NASA’s JPL-led Quantum Gravity Gradiometer Pathfinder, a $20M follow-on contract targeting a 2030 launch (<a href="https://thequantuminsider.com/2026/10/20/monarch-quantum-photonics-hardware-nasa-gravity-sensor/">The Quantum Insider</a>)</li><li>Orange Quantum Systems (Delft) profiled: its Max tester characterizes 150-qubit chips in a ten-day cycle, with IQM, Rigetti, QuantWare and Peak Quantum in its partner programme, and it wants to be the ASML of quantum testing (<a href="https://bits-chips.com/article/orange-quantum-systems-bets-on-becoming-the-asml-of-quantum-testing/">Bits&amp;Chips</a>)</li></ul></div></section><section class="dept" id="calendar"><div class="flag"><h2>Conferences</h2><span class="label muted">refreshed Mon 19 Oct</span></div><div class="cal"><div class="ev"><span class="when">28 Oct–30 Oct</span><span><strong><a href="https://www.cwi.nl/en/events/research-semester-programmes/workshop-on-quantum-error-correction-qec/">CWI Workshop on Quantum Error Correction</a></strong>, Amsterdam</span></div><div class="ev"><span class="when">2 Nov–4 Nov</span><span><strong><a href="https://inqa.ijs.si/">INQA 2026 (quantum annealing)</a></strong>, Bled</span></div><div class="ev"><span class="when">23 Nov–27 Nov</span><span><strong><a href="https://indico.cern.ch/event/1661009/">QT4HEP 2026, quantum technology for high-energy physics</a></strong>, CERN, Geneva</span></div><div class="ev"><span class="when">30 Nov–3 Dec</span><span><strong><a href="https://www.eqtc2026.eu/">European Quantum Technologies Conference (EQTC 2026)</a></strong>, Dublin</span></div><div class="ev"><span class="when">24 Jan–27 Jan 2027</span><span><strong>SODA 2027</strong>, Philadelphia · deadline passed</span></div><div class="ev"><span class="when">3 Feb–5 Feb 2027</span><span><strong><a href="https://swissquantumdays.ch/sqd2027/">Swiss Quantum Days 2027</a></strong>, Engelberg · winter school precedes it</span></div><div class="ev"><span class="when">20 Feb–26 Feb 2027</span><span><strong><a href="https://qipconference.org/2027/">QIP 2027</a></strong>, Singapore</span></div><div class="ev"><span class="when">11 Apr–16 Apr 2027</span><span><strong><a href="https://www.aps.org/events/2027/summit">APS Global Physics Summit</a></strong>, Atlanta</span></div><div class="ev"><span class="when">6 Jun–10 Jun 2027</span><span><strong>STOC 2027 / FCRC</strong>, Atlanta</span></div><div class="ev"><span class="when">21 Jun–25 Jun 2027</span><span><strong><a href="https://qsimconference.org/">QSim 2027</a></strong>, Raleigh, NC · dates per the conference site</span></div><div class="ev"><span class="when">5 Jul–9 Jul 2027</span><span><strong><a href="https://icalp.uj.edu.pl/track-b/">ICALP 2027</a></strong>, Kraków · Track A deadline TBA</span></div><div class="ev"><span class="when">23 Aug–27 Aug 2027</span><span><strong><a href="https://qcrypt.net/2026/2027/">QCrypt 2027</a></strong>, Vienna</span></div><div class="ev"><span class="when">11 Oct–3 Dec 2027</span><span><strong><a href="https://indico.math.cnrs.fr/event/16601/">IHP trimester workshops: Advances in Quantum Cryptography</a></strong>, Institut Henri Poincaré, Paris · three one-week workshops</span></div><div class="ev"><span class="when">24 Oct–29 Oct 2027</span><span><strong><a href="https://www.birs.ca/events/2027/5-day-workshops/27w5826">Fisher Geometry for Quantum Information Theory (BIRS)</a></strong>, Banff</span></div><div class="ev"><span class="when">TBA</span><span><strong><a href="https://tqc-conference.org/2026/2027/">TQC 2027</a></strong>, Grenoble · dates TBA; the talk deadline is usually early February</span></div><div class="ev"><span class="when">TBA</span><span><strong>QEC27 and IEEE QCE27</strong> · not yet announced; QCE usually meets in September with papers due in late March</span></div><div class="ev"><span class="when">TBA</span><span><strong>FOCS 2027</strong> · October 2027, venue TBA</span></div></div><p class="cal-new">New this week: Added EQTC (Dublin), QT4HEP at CERN, QSim 2027, the IHP quantum-cryptography trimester, a BIRS workshop, and tentative CCC and FOCS 2027 deadlines.</p></section><footer class="colophon"><div class="colo-row"><p>The Quantum Daily · Vol. I No. 2 · 21 Oct 2026. Sources: arXiv quant-ph, SciRate (updated Tue 20 Oct, 10:10) and the linked news, blogs and forums. Rankings are forecasts; check the papers before citing.</p><p class="credits"><span>Execution and writing: Claude Opus 5.5</span><span>Design and upkeep: Sergi Masot-Llima</span></p></div><p class="archive-link"><a href="../archive.html">Past editions: the archive →</a></p></footer></div>
+<div class="about-page"><section class="dept about" id="about">
+<div class="flag"><h2>How to Read This Paper</h2><span class="label muted">the same in every edition</span></div>
+<div class="about-cols">
+
+<div class="about-item">
+<h3>What this is</h3>
+<p>A weekday paper on quantum computing and the quant-ph arXiv. The front page covers the most important general news and what people are discussing online. Then come the day's eight papers most likely to draw attention, a check of the previous forecast, which subfields are busy, and industry news, conferences and deadlines.</p>
+<p>It is compiled automatically by Claude, an AI model, from arXiv, SciRate, news sites, blogs and public forums. Summaries can contain mistakes, so read the source before citing it. Not affiliated with arXiv or SciRate.</p>
+</div>
+
+<div class="about-item">
+<h3>When it comes out</h3>
+<p>Each weekday by about 08:30 Swiss time. arXiv announces new listings Sunday to Thursday at 20:00 US Eastern (about 02:00 in Switzerland), so each edition covers the listing announced overnight. Monday's covers Sunday night's listing, and weekend news. On Fridays the paper is updated around 10:30 with a review of the week.</p>
+</div>
+
+<div class="about-item">
+<h3>What the ranking means</h3>
+<p><a href="https://scirate.com/arxiv/quant-ph">SciRate</a> lets researchers "scite" papers they think are worth reading. After a day or two, the scite count is a good measure of how much attention a paper gets from the community.</p>
+<p>At 8:00 the new papers have hardly any scites, so <b>Today's Papers</b> are ranked by a <i>forecast</i> of their final count. The forecast weighs the significance and novelty of the result, the track record of the authors and groups, how active the topic is, and lessons from comparing earlier forecasts with what happened. #1 is the paper we expect to be scited most. It is a forecast of attention, not a verdict on quality.</p>
+</div>
+
+<div class="about-item">
+<h3>Confidence</h3>
+<ul class="legend">
+<li><span class="conf"><span class="dots">●●●</span> High</span> We expect it in the listing's top five.</li>
+<li><span class="conf"><span class="dots">●●○</span> Medium</span> Likely in the top ten.</li>
+<li><span class="conf"><span class="dots">●○○</span> Low–Med / Low</span> Plausible but uncertain: often a specialised or slow-burning paper we think deserves a look.</li>
+</ul>
+<p>Each pick also says <i>why</i> it is ranked where it is.</p>
+</div>
+
+<div class="about-item">
+<h3>Scite counts</h3>
+<ul class="legend">
+<li><span class="sc"><b>12</b><i>early</i></span> Count when the paper was written, a few hours after announcement. Unreliable.</li>
+<li><span class="sc"><b>47</b><i>final</i></span> Count after about a day and a half, close to settled.</li>
+<li><span class="sc"><b>31</b><i>Tue 10:10</i></span> Count read from SciRate at that time during the day; the public paper is refreshed a few times a day (<span class="sc live"><b>31</b><i>live</i></span> in the private edition, which updates instantly).</li>
+<li><span class="sc"><b>—</b><i>scites</i></span> No count yet.</li>
+</ul>
+<p>Click a count to open the paper on SciRate.</p>
+</div>
+
+<div class="about-item">
+<h3>Yesterday, Settled</h3>
+<p>Shown beside the papers, under <b>SciRate today</b> (today's ranking so far, with our predicted rank for each paper), so new counts update both. The previous listing's actual top papers by scites. <b>We said</b> is the rank we had forecast (— if we didn't rank it). The <b>scorecard</b> counts how many of our top five made the real top five and explains the misses. <b>Worth a second look</b> summarises high scorers we missed or underrated. If no counts are available yet, the section lists the previous picks instead (<i>Yesterday's Picks, Revisited</i>).</p>
+<p>On Fridays, <b>Last Week in Quantum</b> does the same for the whole week, with the forecast record for each day.</p>
+</div>
+
+<div class="about-item">
+<h3>Front page and The conversation</h3>
+<p>The lead story is the biggest general quantum story of the day, often the one people are arguing about. <b>The conversation</b> lists where the discussion happened: Hacker News threads, expert blogs, company posts, videos. We link to it and paraphrase it; a source being listed is not an endorsement.</p>
+</div>
+
+<div class="about-item">
+<h3>Trending</h3>
+<p>Every new paper is sorted into subfields (error correction, algorithms, devices, many-body, sensing and so on) by keywords in its title and abstract, so a paper can count in more than one. The small chart shows each field's share of the last 15 listings; <i>share, 5 listings</i> compares the last five with the ten before (▲ up, ▼ down); <i>scites/paper</i> is the average SciRate attention from saved counts; <i>top-10 slots</i> counts how many of each saved listing's ten most-scited papers belong to the field, which shows where the standout papers are; <i>cross-listed</i> is the share of the field's recent papers that come from other arXiv categories, a sign of interest from outside quant-ph. <span class="heat heat-rising">Rising</span> means the share grew by a quarter or more; <span class="heat heat-hot">Hot</span> marks fields where the attention or the discussion is, whatever the volume.</p>
+</div>
+
+<div class="about-item">
+<h3>Industry, deadlines, conferences</h3>
+<p><b>Industry &amp; Startups</b> covers company and funding news that matters but is not front-page material; minor items become one-line briefs, and quiet days stay short.</p>
+<p><b>Deadline watch</b> counts down the days to submission and registration deadlines in the next eight weeks: filled red means less than a week, tinted less than a month. <b>Conferences</b> lists upcoming meetings; the list is checked every week.</p>
+</div>
+
+</div>
+</section>
+</div>
+<script>
+/* Papers layout: while the side column next to #1 (live SciRate box + yesterday's ranking) is longer than
+   #1 and the papers stacked under it, move the next paper up from the two-column grid. Desktop only; the
+   page reads fine without this script (it then shows #1 and #2 on the left). */
+(function () {
+  function fit() {
+    var main = document.querySelector(".top-main"), aside = document.querySelector(".top-aside");
+    var stack = document.querySelector(".top-main .stack"), rest = document.getElementById("papers-rest");
+    if (!main || !aside || !stack || !rest || window.innerWidth <= 820) return;
+    var guard = 8;
+    while (guard-- > 0 && rest.firstElementChild) {
+      var next = rest.firstElementChild, free = aside.offsetHeight - main.offsetHeight;
+      if (free <= 0) break;
+      // try it in the stack (where it is wider, so shorter) and keep it if at least 40% of it fits
+      stack.appendChild(next);
+      var h = next.offsetHeight + 20;
+      if (free < 0.4 * h) { rest.insertBefore(next, rest.firstElementChild); break; }
+    }
+    if (!rest.firstElementChild) rest.hidden = true;
+  }
+  function run() { try { fit(); } catch (e) {} }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  if (window.ResizeObserver) {
+    var aside = document.querySelector(".top-aside");
+    if (aside) new ResizeObserver(run).observe(aside);
+  }
+})();
+
+</script>
+</body>
+</html>
